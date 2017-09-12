@@ -55,7 +55,14 @@ function masterLoop(garments)
 			log.l(curGarment.name + " has already been completed. Skipping this garment.");
 			continue;
 		}
-		garCode = getGarmentCode(curGarment.name);
+
+		//removing this line in favor of an abstracted function
+		//found in the utilities container
+		// garCode = getGarmentCode(curGarment.name);
+
+		//this is the abstracted garCode function found in utilities container
+		garCode = getCode(curGarment.name);
+		log.l("garCode evaluated to: " + garCode);
 
 		////////////////////////
 		////////ATTENTION://////

@@ -4,9 +4,8 @@ function addArtwork()
 	var docRef,
 		layers,
 		artboards,
-		valid,
+		valid = true,
 		versionNum,
-		errorList,
 		garments,
 		curGarment,
 		componentPath,
@@ -26,11 +25,6 @@ function addArtwork()
 	///Logic Container///
 	/////////////////////
 
-	function sendErrors(errorList)
-	{
-		alert("The following errors occurred:\n" + errorList.join("\n"));
-	}
-
 	function init()
 	{
 		var result = true;
@@ -41,11 +35,7 @@ function addArtwork()
 			docRef = app.activeDocument;
 			layers = docRef.layers;
 			artboards = docRef.artboards;
-			valid = true;
 			versionNum = "7";
-			errorList = [];
-
-			// garments;
 
 			log.h("User " + user + "::Begin Script Execution::Add_Artwork v." + versionNum + ".");
 
@@ -172,7 +162,10 @@ function addArtwork()
 	///Function Calls///
 	////////////////////
 
-	valid = init();
+	if(valid)
+	{
+		valid = init();
+	}
 
 	if(valid)
 	{
