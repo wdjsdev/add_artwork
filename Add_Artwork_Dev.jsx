@@ -45,7 +45,7 @@ function addArtwork()
 
 			if(user === "will.dowling")
 			{
-				logDest.push(new File("~/Desktop/automation/add_artwork/logs/add_artwork_dev_log.txt"));
+				logDest.push(new File("~/Desktop/automation/logs/add_artwork_dev_log.txt"));
 				componentPath = componentPrompt();
 				if(!componentPath)
 				{
