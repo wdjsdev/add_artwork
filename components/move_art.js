@@ -50,7 +50,7 @@ function moveArtwork(data)
 				}
 				else if(!coords[curSize][thisPiece.name])
 				{
-					errorList.push("Could not find placement data for " + curSize + " " + thisPiece.name + ".\nThis piece has been skipped.");
+					errorList.push("Could not find placement data for " + thisPiece.name + ".\nThis piece has been skipped.");
 					continue;
 				}
 				curCoords = coords[curSize][thisPiece.name];
