@@ -22,14 +22,10 @@ function getDest(art,mockSize)
 	var mockSizeLay = ppLay.layers[mockSize];
 	var len = mockSizeLay.groupItems.length;
 
-	var ap = getPos(art);
-	var dp;
-
 	for(var gd=0;gd<len;gd++)
 	{
 		var thisPiece = mockSizeLay.pageItems[gd];
-		dp = getPos(thisPiece);
-		if(overlap())
+		if(intersects(art,thisPiece))
 		{
 			//commented the replace method because it did not work for non-standard mockup sizes
 			//for example "28x20" instead of the standard "XL"
@@ -72,17 +68,5 @@ function getDest(art,mockSize)
 	}
 
 	return result;
-
-
-
-	function overlap()
-	{
-		return !(ap.l > dp.r || ap.t < dp.b || ap.b > dp.t || ap.r < dp.l);
-	}
-
-	function getPos(piece)
-	{
-		return {l:piece.left,r:piece.left + piece.width,t:piece.top,b:piece.top - piece.height};
-	}
 
 }
