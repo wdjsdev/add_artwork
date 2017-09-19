@@ -15,30 +15,70 @@ function moveArtwork(data)
 {
 	var result = true;
 	var coords = data.placement;
-	if(coords.Regular)
+	var unnamedPieces = [];
+	if(coords.Regular || coords.Raglan)
 	{
 		coords = data.placement[getRegRag()];
+	}
+	else if(!coords)
+	{
+		errorList.push("Could not find placment data for " + curGarment);
 	}
 	var ppLen = ppLay.layers.length;
 	var pieceLen, curLay, curSize, curCoords, thisPiece;
 
-	for (var ma = 0; ma < ppLen; ma++)
+	for (var ma = 0; ma < ppLen && result; ma++)
 	{
 		curLay = ppLay.layers[ma];
 		curSize = ppLay.layers[ma].name;
 		pieceLen = curLay.groupItems.length;
-		for (var p = 0; p < pieceLen; p++)
+		if(!coords[curSize])
 		{
-			thisPiece = curLay.groupItems[p];
-			curCoords = coords[curSize][thisPiece.name];
-			thisPiece.left = curCoords[0];
-			thisPiece.top = curCoords[1];
-			if(thisPiece.name.toLowerCase().indexOf("outside cowl")>-1 || thisPiece.name.toLowerCase().indexOf("outside yoke") > -1)
+			errorList.push("Could not find placement data for " + curSize + ".");
+			result = false;
+			log.e("Failed to find placment data for " + curGarment + " : " + curSize + "::" + curGarment + ".placement = " + JSON.stringify(coords));
+		}
+		else
+		{
+			for (var p = 0; p < pieceLen; p++)
 			{
-				thisPiece.rotate(180);
+				thisPiece = curLay.groupItems[p];
+				if(thisPiece.name === "")
+				{
+					unnamedPieces.push(thisPiece);
+					continue;
+				}
+				else if(!coords[curSize][thisPiece.name])
+				{
+					errorList.push("Could not find placement data for " + curSize + " " + thisPiece.name + ".\nThis piece has been skipped.");
+					continue;
+				}
+				curCoords = coords[curSize][thisPiece.name];
+				thisPiece.left = curCoords[0];
+				thisPiece.top = curCoords[1];
+				if(thisPiece.name.toLowerCase().indexOf("outside cowl")>-1 || thisPiece.name.toLowerCase().indexOf("outside yoke") > -1)
+				{
+					thisPiece.rotate(180);
+				}
 			}
 		}
 	}
+
+	//if there are any unnamed pieces, make them selected and send an error message
+	if(unnamedPieces.length > 0)
+	{
+		docRef.selection = null;
+		var len = unnamedPieces.length;
+		for(var x=0;x<len;x++)
+		{
+			unnamedPieces[x].selected = true;
+		}
+		errorList.push("There were " + len + " unnamed pieces on the prepress layer for " + curGarment);
+		errorList.push("The unnamed pieces have been selected so you can see which ones need fixing.");
+		log.e("There were " + len + " unnamed pieces on the prepress layer for " + curGarment);
+		result = false;
+	}
+
 	return result;
 
 
