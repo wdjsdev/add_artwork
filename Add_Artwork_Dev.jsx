@@ -18,6 +18,8 @@ function addArtwork()
 		placedLogos = {};
 
 	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
+
+	#include "/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.js";
 	
 
 
@@ -137,7 +139,6 @@ function addArtwork()
 	////Data Storage////
 	////////////////////
 
-		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.js\"");
 		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/central_library.js\"");
 
 		var library = prepressInfo;
