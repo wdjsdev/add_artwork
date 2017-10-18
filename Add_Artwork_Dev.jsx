@@ -140,6 +140,8 @@ function addArtwork()
 	////////////////////
 
 		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/central_library.js\"");
+		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/aa_special_instructions.js\"");
+		// eval("#include \"~/Desktop/automation/utilities/aa_special_instructions.js\"");
 
 		var library = prepressInfo;
 

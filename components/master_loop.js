@@ -105,7 +105,6 @@ function masterLoop(garments)
 		}
 
 
-
 		//make sure all necessary layers are unlocked and visible
 		if(!revealLayers(curGarment))
 		{
@@ -124,6 +123,17 @@ function masterLoop(garments)
 		{
 			log.l("Failed while moving the pieces.");
 			result = false;
+		}
+
+		//check for any special instructions for this garment
+		if(specialInstructions[garCode])
+		{
+			log.h("Beginning special instructions function for " + curGarment.name);
+			if(!specialInstructions[garCode]("add artwork"))
+			{
+				log.l("Failed to execute the special instructions for the garment: " + garCode);
+				result = false;
+			}
 		}
 
 		if(!completedIndicator("add",curGarment))
