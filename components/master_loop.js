@@ -96,6 +96,14 @@ function masterLoop(garments)
 			continue;
 		}
 
+		//check whether this garment uses variable inseam sizing.
+		//if so, alert the user and skip this garment.
+		if(data.mockupSize.indexOf("I")>-1)
+		{
+			errorList.push("Sorry. The garment: " + garCode + " is not compatible with the current version of Add_Artwork.\nPlease use the Add_Artwork_Legacy.jsx script.");
+			continue;
+		}
+
 
 		//get the artboard index of the current mockup
 		if(!findActiveArtboard(curGarment))
