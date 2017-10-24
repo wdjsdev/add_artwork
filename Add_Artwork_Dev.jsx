@@ -79,7 +79,7 @@ function addArtwork()
 		var components =
 		{
 			regDev : new Folder("~/Desktop/automation/add_artwork/components/"),
-			binDev : new Folder("~/Desktop/automation/add_artwork/comp_bin/"),
+			binDev : new Folder("~/Desktop/automation/add_artwork/bin_comp/"),
 			prod: new Folder("/Volumes/Customization/Library/Scripts/Script Resources/components/add_artwork/")
 		}
 

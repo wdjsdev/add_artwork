@@ -30,7 +30,8 @@ function getDest(art,mockSize)
 			//commented the replace method because it did not work for non-standard mockup sizes
 			//for example "28x20" instead of the standard "XL"
 			// result.push(thisPiece.name.replace(data.mockupSize + " ",""));
-			result.push(thisPiece.name.substring(data.mockupSize.length + 1, thisPiece.name.length));
+			// result.push(thisPiece.name.substring(data.mockupSize.length + 1, thisPiece.name.length));
+			result.push(thisPiece.name.substring(thisPiece.name.indexOf(" ") + 1, thisPiece.name.length));
 		}
 	}
 

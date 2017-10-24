@@ -31,11 +31,17 @@ function properMultipleOverlap(pieces)
 
 	var len = pieces.length;
 	var len2 = properMulti.length;
+	var piece1 = pieces[0];
 	for(var x=0; x<len; x++)
 	{
+		if(x>0 && pieces[x] === piece1)
+		{
+			matches++;
+			continue;
+		}
 		for(var y=0; y<len2; y++)
 		{
-			if(properMulti[y] == pieces[x])
+			if(properMulti[y] === pieces[x])
 			{
 				matches++;
 				break;

@@ -284,6 +284,7 @@ var addArt = {
 	{
 		var result = true,
 			ppLen = ppLay.layers.length,
+			destLen,
 			curSize,
 			curLay,
 			dest,
@@ -316,62 +317,71 @@ var addArt = {
 		{
 			curSize = ppLay.layers[g].name;
 			curLay = ppLay.layers[g];
-			dest = curLay.groupItems[curSize + " " + loc];
-
-			artCopy = art.duplicate();
-			artCopy.name = curSize + " " + name;
-
-			if (scale === "standard")
+			destLen = curLay.pageItems.length;
+			for(var d=0;d<destLen;d++)
 			{
-				artCopy.resize(newScale, newScale, true, true, true, true, newScale);
-				newWidth += widthIncrement;
-				newScale = (newWidth / art.width) * 100;
-			}
-			else if (scale === "proportional")
-			{
-				newWidth = dest.width * propScale;
-				newScale = (newWidth / artCopy.width) * 100;
-				artCopy.resize(newScale, newScale, true, true, true, true, newScale);
-			}
-
-			if (placement)
-			{
-				leftR = (placement.left * dest.width);
-				topR = (placement.top * dest.height);
-				artCopy.left = (dest.left - artCopy.width / 2) + leftR;
-				artCopy.top = (dest.top - artCopy.height / 2) - topR;
-			}
-			else if (frontNumPlacement)
-			{
-				if(frontNumPlacement.horzSpace)
+				// dest = curLay.groupItems[curSize + " " + loc];
+				dest = curLay.pageItems[d];
+				if(dest.name.indexOf(loc)==-1)
 				{
-					artCopy.left = (placedLogos[curSize].left + placedLogos[curSize].width / 2) + (frontNumPlacement.horzSpace - (1.8 * frontNumPlacement.counter));
+					continue;
 				}
-				artCopy.top = placedLogos[curSize].top - (placedLogos[curSize].height + frontNumPlacement.vertSpace);
-				frontNumPlacement.counter += frontNumPlacement.inc;
-			}
-			else
-			{
-				artCopy.top = artTop;
-			}
 
-			if (overflow(artCopy, dest))
-			{
-				artCopy = makeClipMask(artCopy, dest);
-			}
-			else
-			{
-				artCopy.moveToBeginning(dest);
-			}
+				artCopy = art.duplicate();
+				artCopy.name = curSize + " " + name;
 
-			if (lowName.indexOf("additional") > -1)
-			{
-				artCopy.zOrder(ZOrderMethod.SENDTOBACK);
-				artCopy.zOrder(ZOrderMethod.BRINGFORWARD);
-			}
-			else if (lowName.indexOf("front logo") > -1)
-			{
-				sendLogoInfo(artCopy, curSize);
+				if (scale === "standard")
+				{
+					artCopy.resize(newScale, newScale, true, true, true, true, newScale);
+					newWidth += widthIncrement;
+					newScale = (newWidth / art.width) * 100;
+				}
+				else if (scale === "proportional")
+				{
+					newWidth = dest.width * propScale;
+					newScale = (newWidth / artCopy.width) * 100;
+					artCopy.resize(newScale, newScale, true, true, true, true, newScale);
+				}
+
+				if (placement)
+				{
+					leftR = (placement.left * dest.width);
+					topR = (placement.top * dest.height);
+					artCopy.left = (dest.left - artCopy.width / 2) + leftR;
+					artCopy.top = (dest.top - artCopy.height / 2) - topR;
+				}
+				else if (frontNumPlacement)
+				{
+					if(frontNumPlacement.horzSpace)
+					{
+						artCopy.left = (placedLogos[curSize].left + placedLogos[curSize].width / 2) + (frontNumPlacement.horzSpace - (1.8 * frontNumPlacement.counter));
+					}
+					artCopy.top = placedLogos[curSize].top - (placedLogos[curSize].height + frontNumPlacement.vertSpace);
+					frontNumPlacement.counter += frontNumPlacement.inc;
+				}
+				else
+				{
+					artCopy.top = artTop;
+				}
+
+				if (overflow(artCopy, dest))
+				{
+					artCopy = makeClipMask(artCopy, dest);
+				}
+				else
+				{
+					artCopy.moveToBeginning(dest);
+				}
+
+				if (lowName.indexOf("additional") > -1)
+				{
+					artCopy.zOrder(ZOrderMethod.SENDTOBACK);
+					artCopy.zOrder(ZOrderMethod.BRINGFORWARD);
+				}
+				else if (lowName.indexOf("front logo") > -1)
+				{
+					sendLogoInfo(artCopy, curSize);
+				}
 			}
 
 		}
