@@ -322,7 +322,7 @@ var addArt = {
 			{
 				// dest = curLay.groupItems[curSize + " " + loc];
 				dest = curLay.pageItems[d];
-				if(dest.name.indexOf(loc)==-1)
+				if(dest.name.substring(dest.name.indexOf(" ") + 1, dest.name.length) !== loc)
 				{
 					continue;
 				}
