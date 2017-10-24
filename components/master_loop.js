@@ -71,11 +71,11 @@ function masterLoop(garments)
 		//		any further if this is a bag tag. Eventually
 		//		this will be removed when a solution is found.
 		
-		if(garCode === "FD_106")
-		{
-			errorList.push("Sorry. You're on your own temporarily for bag tags.\nI hope to have that fixed ASAP.");
-			continue;
-		}
+		// if(garCode === "FD_106")
+		// {
+		// 	errorList.push("Sorry. You're on your own temporarily for bag tags.\nI hope to have that fixed ASAP.");
+		// 	continue;
+		// }
 		//
 		////////////////////////
 

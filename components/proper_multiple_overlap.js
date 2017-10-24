@@ -26,7 +26,11 @@ function properMultipleOverlap(pieces)
 		"Front",
 		"Left Front Pocket",
 		"Right Front Pocket",
-		"Pocket"
+		"Pocket",
+		"Front1",
+		"Front2",
+		"Front3",
+		"Front4"
 	]
 
 	var len = pieces.length;
