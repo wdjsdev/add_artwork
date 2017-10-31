@@ -136,7 +136,11 @@ var addArt = {
 		var frontNumPlacement = {"vertSpace":undefined,"horzSpace":undefined,"counter":undefined,"inc":undefined,"center":undefined};
 		var placement = null;
 
-		if(artCenter + centerBuffer > mockSizeDestCenter && artCenter - centerBuffer < mockSizeDestCenter)
+		//check whether this is a split front garment
+		//like full button or full zip
+		var splitFrontPat = /(front|left|right) ?(front|left|right)?/ig;
+
+		if(artCenter + centerBuffer > mockSizeDestCenter && artCenter - centerBuffer < mockSizeDestCenter && !splitFrontPat.test(dest))
 		{
 			centerNumber = true;
 		}
@@ -366,7 +370,8 @@ var addArt = {
 
 				if (overflow(artCopy, dest))
 				{
-					artCopy = makeClipMask(artCopy, dest);
+					// artCopy = makeClipMask(artCopy, dest);
+					makeClipMask(artCopy,dest);
 				}
 				else
 				{

@@ -13,8 +13,6 @@
 */
 
 function makeClipMask(art, dest) {
-	var result = true;
-	// var bounds = [dest.top, dest.left, dest.left + dest.width, dest.top - dest.height];
 	var bounds = [dest.top, dest.left, dest.width, dest.height];
 	var tmpLay = docRef.layers.add();
 	tmpLay.name = "temporary";
@@ -27,8 +25,4 @@ function makeClipMask(art, dest) {
 	clip.clipping = true;
 	clipGroup.clipped = true;
 	tmpLay.remove();
-
-	result = clipGroup;
-
-	return result;
 }

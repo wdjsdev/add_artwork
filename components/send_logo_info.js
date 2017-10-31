@@ -16,10 +16,4 @@
 
 function sendLogoInfo(logo, size) {
 	placedLogos[size] = logo;
-	// if (logo != undefined) {
-	// 	placedLogos[size] = logo;
-	// 	return true;
-	// } else {
-	// 	return false;
-	// }
 }
