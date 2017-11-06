@@ -138,7 +138,7 @@ var addArt = {
 
 		//check whether this is a split front garment
 		//like full button or full zip
-		var splitFrontPat = /(front|left|right) ?(front|left|right)?/ig;
+		var splitFrontPat = /((front|left|right) ?){2}/ig;
 
 		if(artCenter + centerBuffer > mockSizeDestCenter && artCenter - centerBuffer < mockSizeDestCenter && !splitFrontPat.test(dest))
 		{
