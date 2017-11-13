@@ -78,7 +78,8 @@ function loopArtLayers()
 					{
 						scale = "proportional";
 					}
-					func = name = layName
+					func = "Additional Art";
+					name = layName;
 				}
 
 
