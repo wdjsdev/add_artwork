@@ -16,7 +16,7 @@ function loopArtLayers()
 	var len = artLay.layers.length;
 	var curLay,destLen,success;
 
-	var func,art,loc,name,scale,dest,placement;
+	var func,art,loc,name,scale,dest,placement,layName,lowLayName;
 	var artLocs = [];
 
 
@@ -24,9 +24,10 @@ function loopArtLayers()
 	for(var al=0;al < len;al++)
 	{
 		curLay = artLay.layers[al];
-		layName = curLay.name.toLowerCase();
+		layName = curLay.name;
+		lowLayName = layName.toLowerCase();
 
-		if(noScalePat.test(layName))
+		if(noScalePat.test(lowLayName))
 		{
 			scale = false;
 		}
@@ -50,7 +51,7 @@ function loopArtLayers()
 			{
 				loc = dest[cd];
 				
-				if(layName.indexOf("front logo") > -1)
+				if(lowLayName.indexOf("front logo") > -1)
 				{
 					if(scale !== false && data.scaleFrontLogo)
 					{
@@ -60,27 +61,28 @@ function loopArtLayers()
 					{
 						scale = false;
 					}
-					func = name = "Front Logo";
+					func = "Front Logo";
+					name = layName;
 				}
 
 
-				else if(layName.indexOf("front number") > -1)
+				else if(lowLayName.indexOf("front number") > -1)
 				{
-					func = name = "Front Number";
+					func = name = layName;
 				}
 
 
-				else if(layName.indexOf("additional") > -1)
+				else if(lowLayName.indexOf("additional") > -1)
 				{
 					if(scale !== false)
 					{
 						scale = "proportional";
 					}
-					func = name = "Additional Art";
+					func = name = layName
 				}
 
 
-				else if(layName.indexOf("hood") > -1)
+				else if(lowLayName.indexOf("hood") > -1)
 				{
 					if(scale !== false)
 					{
@@ -92,7 +94,7 @@ function loopArtLayers()
 				}
 
 
-				else if(layName.indexOf("bt_")>-1)
+				else if(lowLayName.indexOf("bt_")>-1)
 				{
 					func = curLay.name;
 					name = curLay.name + " Art";
