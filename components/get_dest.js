@@ -51,8 +51,14 @@ function getDest(art,mockSize)
 
 		log.l("Checking to see whether these multiple overlaps are acceptable.");
 		//check whether the art SHOULD overlap two different pieces
+		//look for identically named pieces, like Front Left Leg piece of varying inseam sizes
+		if(samePieceNames(result))
+		{
+			result = [result[0]];
+		}
+		//look for multiple overlap between two different pieces
 		//for example front left and front right for a full button or full zip
-		if(!properMultipleOverlap(result))
+		else if(!properMultipleOverlap(result))
 		{
 			var userChoice = destPrompt(result,art);
 			if(!userChoice)
