@@ -23,10 +23,10 @@ function samePieceNames(pieces)
 	var result = true;
 	var len = pieces.length;
 	var counter = 1;
-	var piece1 = stripSize(pieces[0]);
+	var piece1 = pieces[0];
 	for(var x=1;x<len;x++)
 	{
-		if(stripSize(pieces[x]) === piece1)
+		if(pieces[x] === piece1)
 		{
 			counter++;
 		}
@@ -36,9 +36,4 @@ function samePieceNames(pieces)
 		result = false;
 	}
 	return result;
-}
-
-function stripSize(piece)
-{
-	return piece.substring(piece.indexOf(" ")+1, piece.length);
 }
