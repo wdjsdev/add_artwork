@@ -127,12 +127,6 @@ function masterLoop(garments)
 			result = false;
 		}
 
-		if(!moveArtwork(data))
-		{
-			log.l("Failed while moving the pieces.");
-			result = false;
-		}
-
 		//check for any special instructions for this garment
 		if(specialInstructions[garCode])
 		{
@@ -142,6 +136,12 @@ function masterLoop(garments)
 				log.l("Failed to execute the special instructions for the garment: " + garCode);
 				result = false;
 			}
+		}
+
+		if(!moveArtwork(data))
+		{
+			log.l("Failed while moving the pieces.");
+			result = false;
 		}
 
 		if(!completedIndicator("add",curGarment))
