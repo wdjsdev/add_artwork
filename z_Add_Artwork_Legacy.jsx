@@ -444,13 +444,13 @@ function container()
 		//PC
 		eval("#include \"N:\\Library\\Scripts\\Script Resources\\Data\\library.js\"");
 		eval("#include \"N:\\Library\\Scripts\\Script Resources\\Data\\central_library.js\"");
-		eval("#include \"N:\\Library\\Scripts\\Script Resources\\Data\\Utilities_Container.js\"");
+		eval("#include \"N:\\Library\\Scripts\\Script Resources\\Data\\Utilities_Container.jsxbin\"");
 		
 	} else {
 		// MAC
 		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/library.js\"");
 		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/central_library.js\"");
-		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.js\"");
+		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
 	}
 
 

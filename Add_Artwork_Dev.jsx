@@ -19,7 +19,7 @@ function addArtwork()
 
 	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.js\"");
+	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
 	
 
 
