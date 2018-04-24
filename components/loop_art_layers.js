@@ -131,10 +131,16 @@ function loopArtLayers()
 
 	//now that the correct dest has been established for each location,
 	//loop the artLocs array and run the appropriate functions for each
-	for(var loc in artLocs)
+	// for(var loc in artLocs)
+	// {
+	// 	var thisLoc = artLocs[loc];
+	// 	success = addArt[thisLoc.func](thisLoc.art,thisLoc.loc,thisLoc.name,thisLoc.scale,thisLoc.placement);
+	// }
+
+	for(var loc=0,len = artLocs.length;loc<len;loc++)
 	{
-		var thisLoc = artLocs[loc];
-		success = addArt[thisLoc.func](thisLoc.art,thisLoc.loc,thisLoc.name,thisLoc.scale,thisLoc.placement);
+			var thisLoc = artLocs[loc];
+			success = addArt[thisLoc.func](thisLoc.art,thisLoc.loc,thisLoc.name,thisLoc.scale,thisLoc.placement);
 	}
 
 	return result;
