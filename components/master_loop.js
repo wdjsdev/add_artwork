@@ -131,9 +131,13 @@ function masterLoop(garments)
 		if(specialInstructions[garCode])
 		{
 			log.h("Beginning special instructions function for " + curGarment.name);
-			if(!specialInstructions[garCode]("add artwork"))
+			try
 			{
-				log.l("Failed to execute the special instructions for the garment: " + garCode);
+				specialInstructions[garCode]("add artwork");
+			}
+			catch(e)
+			{
+				log.e("Failed to execute the special instructions for the garment: " + garCode + "::error message: " + e + ", on line: " + e.line);
 				result = false;
 			}
 		}
