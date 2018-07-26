@@ -17,7 +17,15 @@ function findActiveArtboard(currentWearer)
 	//loop the artboards to find the artboard that contains the piece
 	//set activeArtboardIndex to the container artboard
 	var result = false;
-	var piece = infoLay.pageItems["Order Number"];
+	try
+	{
+		var piece = infoLay.pageItems["Order Number"];
+	}
+	catch(e)
+	{
+		errorList.push(currentWearer.name + " is missing the order number text.");
+		return false;
+	}
 	var vB = piece.visibleBounds;
 	var pB = {"left": vB[0], "top": vB[1], "right": vB[2], "bot": vB[3]};
 
