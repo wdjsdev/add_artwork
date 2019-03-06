@@ -19,6 +19,7 @@ function masterLoop(garments)
 	log.h("Beginning of masterLoop function. Processing " + garLength + " garments.");
 
 	var garCode,
+		completedGarments = 0,
 		regRag;
 
 	//loop the garments layers array while result is true
@@ -52,7 +53,13 @@ function masterLoop(garments)
 		}
 		else if(indicator)
 		{
+			completedGarments++;
 			log.l(curGarment.name + " has already been completed. Skipping this garment.");
+
+			if(completedGarments === garLength)
+			{
+				errorList.push("Every garment in this master file has already been marked completed.");
+			}
 			continue;
 		}
 
