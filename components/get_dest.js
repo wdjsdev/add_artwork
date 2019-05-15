@@ -24,7 +24,7 @@ function getDest(art,mockSize)
 
 	for(var gd=0;gd<len;gd++)
 	{
-		var thisPiece = mockSizeLay.pageItems[gd];
+		var thisPiece = mockSizeLay.groupItems[gd];
 		if(intersects(art,thisPiece))
 		{
 			//commented the replace method because it did not work for non-standard mockup sizes
