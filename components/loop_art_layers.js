@@ -126,6 +126,7 @@ function loopArtLayers()
 		name = null;
 		scale = null;
 		dest = null;
+		placement = null;
 		
 	}
 
