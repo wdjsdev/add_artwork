@@ -3,7 +3,7 @@ function addArtwork()
 	//global variables
 	var docRef = app.activeDocument,
 		layers = docRef.layers,
-		artboards docRef.artboards,
+		artboards = docRef.artboards,
 		valid = true,
 		versionNum,
 		garments,
