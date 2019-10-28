@@ -3,7 +3,7 @@ function addArtwork()
 	//global variables
 	var docRef = app.activeDocument,
 		layers = docRef.layers,
-		artboards docRef.artboards,
+		artboards = docRef.artboards,
 		valid = true,
 		versionNum,
 		garments,
@@ -35,7 +35,7 @@ function addArtwork()
 	//get the components
 	var devPath = "~/Desktop/automation/build_mockup/components";
 	var prodPath = componentsPath + "add_artwork";
-	var compFiles = includeComponents(dev,prod,false);
+	var componentFiles = includeComponents(devPath,prodPath,false);
 
 	if(componentFiles)
 	{
