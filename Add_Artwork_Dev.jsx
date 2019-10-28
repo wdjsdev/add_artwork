@@ -33,9 +33,9 @@ function addArtwork()
 	logDest.push(getLogDest());
 
 	//get the components
-	var devPath = "~/Desktop/automation/build_mockup/components";
+	var devPath = "~/Desktop/automation/add_artwork/components";
 	var prodPath = componentsPath + "add_artwork";
-	var compFiles = includeComponents(dev,prod,false);
+	var componentFiles = includeComponents(devPath,prodPath,false);
 
 	if(componentFiles)
 	{
