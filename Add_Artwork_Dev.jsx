@@ -35,7 +35,7 @@ function addArtwork()
 	//get the components
 	var devPath = "~/Desktop/automation/build_mockup/components";
 	var prodPath = componentsPath + "add_artwork";
-	var compFiles = includeComponents(dev,prod,false);
+	var componentFiles = includeComponents(devPath,prodPath,false);
 
 	if(componentFiles)
 	{
