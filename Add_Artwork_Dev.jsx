@@ -1,9 +1,9 @@
 function addArtwork()
 {
 	//global variables
-	var docRef,
-		layers,
-		artboards,
+	var docRef = app.activeDocument,
+		layers = docRef.layers,
+		artboards docRef.artboards,
 		valid = true,
 		versionNum,
 		garments,
@@ -17,6 +17,8 @@ function addArtwork()
 		logoType,
 		placedLogos = {};
 
+	var scriptName = "add_artwork"; 
+
 	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 
 	//Production Utilities
@@ -27,105 +29,31 @@ function addArtwork()
 	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
 	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
 
+
+	logDest.push(getLogDest());
+
+	//get the components
+	var devPath = "~/Desktop/automation/build_mockup/components";
+	var prodPath = componentsPath + "add_artwork";
+	var compFiles = includeComponents(dev,prod,false);
+
+	if(componentFiles)
+	{
+		for(var f=0;f<componentFiles.length;f++)
+		{
+			var thisComponent = componentFiles[f];
+			eval("#include \"" + thisComponent + "\"");
+		}
+	}
+	else
+	{
+		valid = false;
+		errorList.push("Failed to find the necessary component files.");
+	}
+
 	///////Begin/////////
 	///Logic Container///
 	/////////////////////
-
-	function init()
-	{
-		var result = true;
-
-		//verify open document
-		if(app.documents.length > 0)
-		{
-			docRef = app.activeDocument;
-			layers = docRef.layers;
-			artboards = docRef.artboards;
-			versionNum = "7";
-
-			log.h("User " + user + "::Begin Script Execution::Add_Artwork v." + versionNum + ".");
-
-			//development prompt to verify which components should be used
-			//only will.dowling will be prompted here, other artists
-			//will always get the production components.
-
-			if(user === "will.dowling")
-			{
-				logDest.push(new File("~/Desktop/automation/logs/add_artwork_dev_log.txt"));
-				componentPath = componentPrompt();
-				if(!componentPath)
-				{
-					result = false;
-				}
-			}
-			else
-			{
-				//send all log messages to the add_art_log file
-				logDest.push(new File("/Volumes/Customization/Library/Scripts/Script Resources/Data/.script_logs/add_art_log.txt"));
-				componentPath = new Folder("/Volumes/Customization/Library/Scripts/Script Resources/components/add_artwork/");
-			}
-
-
-
-			//initialization complete
-
-		}
-		else
-		{
-			result = false;
-		}
-
-		return result;
-	}
-
-	function componentPrompt()
-	{
-		var components =
-		{
-			regDev : new Folder("~/Desktop/automation/add_artwork/components/"),
-			binDev : new Folder("~/Desktop/automation/add_artwork/bin_comp/"),
-			prod: new Folder("/Volumes/Customization/Library/Scripts/Script Resources/components/add_artwork/")
-		}
-
-		var result = false;
-
-		var w = new Window("dialog","Which components do you want to use?");
-			var txtGroup = w.add("group");
-				var topTxt = txtGroup.add("statictext", undefined, "Select the component group.");
-
-			var btnGroup = w.add("group");
-				btnGroup.orientation = "column";
-				var regDev = btnGroup.add("button", undefined, "Regular Development");
-					regDev.onClick = function()
-					{
-						result = components.regDev;
-						log.l("Using regular development components.");
-						w.close();
-					}
-				var binDev = btnGroup.add("button", undefined, "Binary Development");
-					binDev.onClick = function()
-					{
-						result = components.binDev;
-						log.l("Using binary development components.");
-						w.close();
-					}
-				var production = btnGroup.add("button", undefined, "Production Components");
-					production.onClick = function()
-					{
-						result = components.prod;
-						log.l("Using production components.");
-						w.close();
-					}
-				var cancel = btnGroup.add("button", undefined, "Cancel");
-					cancel.onClick = function()
-					{
-						result = false;
-						w.close();
-					}
-		w.show();
-
-		return result;
-	}
 
 
 
@@ -143,8 +71,8 @@ function addArtwork()
 	////Data Storage////
 	////////////////////
 
-		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/central_library.js\"");
-		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/aa_special_instructions.js\"");
+		eval("#include \"" + dataPath + "central_library.js\"");
+		eval("#include \"" + dataPath + "aa_special_instructions.js\"");
 
 		var library = prepressInfo;
 
@@ -167,25 +95,6 @@ function addArtwork()
 	///////Begin////////
 	///Function Calls///
 	////////////////////
-
-	if(valid)
-	{
-		valid = init();
-	}
-
-	if(valid)
-	{
-		//init was successful
-		//bring in necessary components
-		var compFiles = componentPath.getFiles();
-		for(var cf=0;cf<compFiles.length;cf++)
-		{
-			if(compFiles[cf].name.indexOf("js")>-1)
-			{
-				eval("#include \"" + compFiles[cf] + "\"");
-			}
-		}
-	}
 
 	if(valid)
 	{
