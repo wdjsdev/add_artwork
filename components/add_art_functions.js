@@ -368,7 +368,7 @@ var addArt = {
 					artCopy.top = artTop;
 				}
 
-				if (overflow(artCopy, dest))
+				if (overflow(artCopy, dest) && lowName.indexOf("additional") === -1)
 				{
 					// artCopy = makeClipMask(artCopy, dest);
 					makeClipMask(artCopy,dest);
