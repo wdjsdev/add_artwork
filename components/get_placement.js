@@ -18,6 +18,7 @@
 function getPlacement(art, dest) {
 	var result = {};
 	result.left = ((art.left + art.width / 2) - dest.left) / dest.width;
-	result.top = (dest.top - (art.top + art.height / 2)) / dest.height;
+	result.top = (dest.top - (art.top - art.height / 2)) / dest.height;
+	// result.top = dest.height/ (dest.top - (art.top - art.height / 2));
 	return result;
 }

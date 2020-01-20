@@ -190,6 +190,16 @@ var addArt = {
 		return result;
 	},
 
+	"Front Pocket": function(art,dest,name,scale)
+	{
+		$.writeln("pause");
+		if(isContainedWithin(art,dest))
+		{
+			//art is totally on on the pocket.. move it around proportionally
+			//but do it better than additional artwork does..;
+		}
+	},
+
 	"Additional Art": function(art, dest, name, scale)
 	{
 		var result = true;
@@ -307,14 +317,6 @@ var addArt = {
 			//get the dest piece for the mockup size
 			var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + loc];
 			propScale = art.width / mockSizeDest.width;
-			// if (art.width < mockSizeDest.width)
-			// {
-			// 	propScale = art.width / mockSizeDest.width;
-			// }
-			// else
-			// {
-			// 	propScale = mockSizeDest.width / art.width;
-			// }
 		}
 
 		for (var g = 0; g < ppLen; g++)
@@ -352,7 +354,7 @@ var addArt = {
 					leftR = (placement.left * dest.width);
 					topR = (placement.top * dest.height);
 					artCopy.left = (dest.left - artCopy.width / 2) + leftR;
-					artCopy.top = (dest.top - artCopy.height / 2) - topR;
+					artCopy.top = (dest.top + artCopy.height / 2) - topR;
 				}
 				else if (frontNumPlacement)
 				{
