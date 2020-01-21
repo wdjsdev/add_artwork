@@ -1,3 +1,4 @@
+#target Illustrator
 function addArtwork()
 {
 	//global variables
@@ -21,14 +22,21 @@ function addArtwork()
 
 	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 
-	//Production Utilities
-	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
-	
-	// //Dev Utilities
-	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	var devUtilities = true;
 
+	//Utilities
+	if(!devUtilities || $.getenv("USER") !== "will.dowling")
+	{
+		// //Production Utilities
+		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
+		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
+	}
+	else
+	{
+		//Dev Utilities
+		eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+		eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	}
 
 	logDest.push(getLogDest());
 

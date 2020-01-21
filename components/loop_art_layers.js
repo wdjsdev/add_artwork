@@ -16,7 +16,7 @@ function loopArtLayers()
 	var len = artLay.layers.length;
 	var curLay,destLen,success;
 
-	var mockupSizeDest;
+	var mockupSizeLayer,mockupSizeDest;
 
 	var func,art,loc,name,scale,dest,placement,layName,lowLayName;
 	var artLocs = [];
@@ -55,7 +55,7 @@ function loopArtLayers()
 
 				try
 				{
-					mockupSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + loc];
+					mockupSizeLayer = ppLay.layers[data.mockupSize];
 				}
 				catch(e)
 				{
@@ -63,6 +63,21 @@ function loopArtLayers()
 					log.e("File is missing the mockup size layer: " + data.mockupSize);
 					result = false;
 					return result;
+				}
+
+				try
+				{
+					mockupSizeDest = mockupSizeLayer.pageItems[data.mockupSize + " " + loc];
+				}
+				catch(e)
+				{
+					for(var i=0,iLen=mockupSizeLayer.pageItems.length;i<iLen && !mockupSizeDest ;i++)
+					{
+						if(mockupSizeLayer.pageItems[i].name.indexOf(loc)>-1)
+						{
+							mockupSizeDest = mockupSizeLayer.pageItems[i];
+						}
+					}
 				}
 				
 				if(lowLayName.indexOf("front logo") > -1)
@@ -85,7 +100,7 @@ function loopArtLayers()
 					func = name = layName;
 				}
 
-				else if(lowLayName.indexOf("front pocket") > -1)
+				else if(lowLayName.indexOf("pocket") > -1)
 				{
 					func = name = "Front Pocket";
 					if(loc.name === "Front")
@@ -109,14 +124,15 @@ function loopArtLayers()
 					}
 					else
 					{
-						if(!isContainedWithin(art,loc) && intersects(art,loc))
+						if(!isContainedWithin(art,mockupSizeDest))
 						{
-
+							//art needs to go on front and pocket
 						}
 						else
 						{
+							//art on pocket only
 
-							placement = getPlacement()
+							placement = getPlacement(art,mockupSizeDest);
 						}
 					}
 				}
@@ -138,7 +154,7 @@ function loopArtLayers()
 					if(scale !== false)
 					{
 						scale = "proportional";
-						placement = getPlacement(art,ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + loc])
+						placement = getPlacement(art,mockupSizeDest)
 					}
 					func = "Generic";
 					name = curLay.name + " Art";
