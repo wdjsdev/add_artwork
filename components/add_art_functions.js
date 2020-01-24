@@ -190,21 +190,33 @@ var addArt = {
 		return result;
 	},
 
-	"Front Pocket": function(art,dest,name,scale)
+	"Pocket": function(art,dest,name,scale,placement)
 	{
-		$.writeln("pause");
-		if(isContainedWithin(art,dest))
+		//check to see if pocket art intersects the "Front" piece as well
+		var result = true;
+		var overflowLocs = [];
+
+		var mockSizeLay = findSpecificLayer(ppLay,data.mockupSize);
+		var mockSizeDest = findSpecificPageItem(mockSizeLay,dest);
+		if(isContainedWithin(art,mockSizeDest))
 		{
-			//art is totally on on the pocket.. move it around proportionally
-			//but do it better than additional artwork does..;
+			result = addArt["Generic"](art,dest,name,scale,placement);
 		}
+		else
+		{
+			overflowLocs = getDest(art,data.mockupSize);
+			overflowLocs.splice(overflowLocs.indexOf(dest),1);
+			result = addArt["Generic"](art,dest,name,scale,placement,undefined,overflowLocs);
+		}
+
+		return result;
 	},
 
-	"Additional Art": function(art, dest, name, scale)
+	"Additional Art": function(art, dest, name, scale, placement)
 	{
 		var result = true;
-		var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + dest];
-		var placement = getPlacement(art, mockSizeDest);
+		// var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + dest];
+		// var placement = getPlacement(art, mockSizeDest);
 		result = addArt["Generic"](art, dest, name, scale, placement);
 		return result;
 	},
@@ -294,10 +306,12 @@ var addArt = {
 		return true;
 	},
 
-	"Generic": function(art, loc, name, scale, placement, frontNumPlacement)
+	"Generic": function(art, loc, name, scale, placement, frontNumPlacement,overflowLoc)
 	{
 		var result = true,
 			ppLen = ppLay.layers.length,
+			mockSizeLayer = findSpecificLayer(ppLay,data.mockupSize),
+			mockSizeDest = findSpecificPageItem(mockSizeLayer,data.mockupSize + " " + loc),
 			destLen,
 			curSize,
 			curLay,
@@ -315,7 +329,6 @@ var addArt = {
 		if (scale === "proportional")
 		{
 			//get the dest piece for the mockup size
-			var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + loc];
 			propScale = art.width / mockSizeDest.width;
 		}
 
@@ -378,6 +391,21 @@ var addArt = {
 				else
 				{
 					artCopy.moveToBeginning(dest);
+				}
+
+				if(overflowLoc && overflowLoc.length)
+				{
+					var overflowLocPiece,overflowArt;
+					//get the overflow loc piece from the prepress layer
+					for(var of=0,ofLen=overflowLoc.length;of<ofLen;of++)
+					{
+						overflowLocPiece = findSpecificPageItem(curLay,overflowLoc[of]);
+						if(overflowLocPiece)
+						{
+							overflowArt = artCopy.duplicate(overflowLocPiece);
+						}	
+					}
+					
 				}
 
 				if (lowName.indexOf("additional") > -1)

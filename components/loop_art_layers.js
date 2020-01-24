@@ -16,7 +16,8 @@ function loopArtLayers()
 	var len = artLay.layers.length;
 	var curLay,destLen,success;
 
-	var mockupSizeLayer,mockupSizeDest;
+	var mockSizeLayer,mockSizeDest;
+
 
 	var func,art,loc,name,scale,dest,placement,layName,lowLayName;
 	var artLocs = [];
@@ -55,7 +56,7 @@ function loopArtLayers()
 
 				try
 				{
-					mockupSizeLayer = ppLay.layers[data.mockupSize];
+					mockSizeLayer = ppLay.layers[data.mockupSize];
 				}
 				catch(e)
 				{
@@ -65,20 +66,8 @@ function loopArtLayers()
 					return result;
 				}
 
-				try
-				{
-					mockupSizeDest = mockupSizeLayer.pageItems[data.mockupSize + " " + loc];
-				}
-				catch(e)
-				{
-					for(var i=0,iLen=mockupSizeLayer.pageItems.length;i<iLen && !mockupSizeDest ;i++)
-					{
-						if(mockupSizeLayer.pageItems[i].name.indexOf(loc)>-1)
-						{
-							mockupSizeDest = mockupSizeLayer.pageItems[i];
-						}
-					}
-				}
+				
+				mockSizeDest = findSpecificPageItem(mockSizeLayer,loc);
 				
 				if(lowLayName.indexOf("front logo") > -1)
 				{
@@ -102,38 +91,24 @@ function loopArtLayers()
 
 				else if(lowLayName.indexOf("pocket") > -1)
 				{
-					func = name = "Front Pocket";
-					if(loc.name === "Front")
+					func = name = "Pocket";
+					if(loc === "Front")
 					{
-						//check to see whether the artwork was contained within
-						//the bounds of the pocket. if so, there's no need to
-						//put it on the front (because it would be inside the pocket
-						//and invisible)
-						var lastLoc = artLocs[artLocs.length-1];
-						if(isContainedWithin(art,lastLoc.loc))
-						{
-							continue;
-						}
-
-						art = lastLoc.art;
-						loc = lastLoc.loc;
-						name = lastLoc.name;
-						scale = lastLoc.scale;
-						dest = lastLoc.dest;
-						placement = lastLoc.placement;
+						//skip it... i think this should be handled
+						// in the front pocket function 
+						continue;
 					}
 					else
 					{
-						if(!isContainedWithin(art,mockupSizeDest))
-						{
-							//art needs to go on front and pocket
-						}
-						else
-						{
-							//art on pocket only
-
-							placement = getPlacement(art,mockupSizeDest);
-						}
+						placement = getPlacement(art,mockSizeDest);
+					}
+					if(isContainedWithin(art,mockSizeDest))
+					{
+						scale = false;
+					}
+					else
+					{
+						scale = "proportional";
 					}
 				}
 
@@ -143,7 +118,7 @@ function loopArtLayers()
 					{
 						scale = "proportional";
 					}
-					placement = getPlacement(art,mockupSizeDest);
+					placement = getPlacement(art,mockSizeDest);
 					func = "Additional Art";
 					name = layName;
 				}
@@ -154,7 +129,7 @@ function loopArtLayers()
 					if(scale !== false)
 					{
 						scale = "proportional";
-						placement = getPlacement(art,mockupSizeDest)
+						placement = getPlacement(art,mockSizeDest)
 					}
 					func = "Generic";
 					name = curLay.name + " Art";
@@ -186,13 +161,13 @@ function loopArtLayers()
 			}
 			
 		}
-		func = null;
-		art = null;
-		loc = null;
-		name = null;
-		scale = null;
-		dest = null;
-		placement = null;
+		func = undefined;
+		art = undefined;
+		loc = undefined;
+		name = undefined;
+		scale = undefined;
+		dest = undefined;
+		placement = undefined;
 		
 	}
 
