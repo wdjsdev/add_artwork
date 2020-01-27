@@ -102,7 +102,7 @@ function loopArtLayers()
 					{
 						placement = getPlacement(art,mockSizeDest);
 					}
-					if(isContainedWithin(art,mockSizeDest))
+					if(isContainedWithin(art,mockSizeDest) || noScalePat.test(layName))
 					{
 						scale = false;
 					}
