@@ -58,7 +58,7 @@ function masterLoop(garments)
 
 			if(completedGarments === garLength)
 			{
-				errorList.push("Every garment in this master file has already been marked completed.");
+				errorList.push("Every garment in this master file has already been marked completed. Check the information layer.");
 			}
 			continue;
 		}

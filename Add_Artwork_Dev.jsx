@@ -11,6 +11,8 @@ function addArtwork()
 		curGarment,
 		componentPath,
 		data,
+		mockSizeLayer,
+		mockSizeDest,
 		ppLay,
 		artLay,
 		infoLay,
@@ -25,25 +27,27 @@ function addArtwork()
 	var devUtilities = true;
 
 	//Utilities
-	if(!devUtilities || $.getenv("USER") !== "will.dowling")
-	{
-		// //Production Utilities
-		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-		eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
-	}
-	else
-	{
-		//Dev Utilities
-		eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-		eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
-	}
+	#include "~/Desktop/automation/utilities/Utilities_Container.js";
+	// if(!devUtilities || $.getenv("USER") !== "will.dowling")
+	// {
+	// 	// //Production Utilities
+	// 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
+	// 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
+	// }
+	// else
+	// {
+	// 	//Dev Utilities
+	// 	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+	// 	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	// }
+
 
 	logDest.push(getLogDest());
 
 	//get the components
 	var devPath = "~/Desktop/automation/add_artwork/components";
 	var prodPath = componentsPath + "add_artwork";
-	var componentFiles = includeComponents(devPath,prodPath,false);
+	var componentFiles = includeComponents(devPath,devPath,true);
 
 	if(componentFiles)
 	{
