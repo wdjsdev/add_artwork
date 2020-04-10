@@ -27,7 +27,7 @@ function addArtwork()
 	var devUtilities = true;
 
 	//Utilities
-	#include "~/Desktop/automation/utilities/Utilities_Container.js";
+	// #include "~/Desktop/automation/utilities/Utilities_Container.js";
 	// if(!devUtilities || $.getenv("USER") !== "will.dowling")
 	// {
 	// 	// //Production Utilities
@@ -41,19 +41,58 @@ function addArtwork()
 	// 	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
 	// }
 
+	function getUtilities()
+	{
+		var result;
+		var user,networkPath,localPath,utilPath;
+		if($.os.match("Windows"))
+		{
+			user= $.getenv("USERNAME");
+			networkPath = "//AD4/Customization/";
+		}
+		else
+		{
+			user = $.getenv("USER");
+			networkPath = "/Volumes/Customization/";
+			localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
+		}
+
+		utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+		if(Folder(utilPath).exists)
+		{
+			result = utilPath;
+		}
+		return result;
+
+	}
+	var utilitiesPath = getUtilities();
+	if(utilitiesPath)
+	{
+		eval("#include \"" + utilitiesPath + "Utilities_Container.jsxbin" + "\"");
+		eval("#include \"" + utilitiesPath + "Batch_Framework.jsxbin" + "\"");
+	}
+	else
+	{
+		alert("Failed to find the utilities..");
+		return false;	
+	}
+
+
+
 
 	logDest.push(getLogDest());
 
 	//get the components
 	var devPath = "~/Desktop/automation/add_artwork/components";
 	var prodPath = componentsPath + "add_artwork";
-	var componentFiles = includeComponents(devPath,devPath,true);
+	var componentFiles = includeComponents(devPath,prodPath,true);
 
+	var curPath;
 	if(componentFiles)
 	{
 		for(var f=0;f<componentFiles.length;f++)
 		{
-			var thisComponent = componentFiles[f];
+			var thisComponent = componentFiles[f].fullName;
 			eval("#include \"" + thisComponent + "\"");
 		}
 	}
