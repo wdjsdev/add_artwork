@@ -24,47 +24,32 @@ function addArtwork()
 
 	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 
-	var devUtilities = true;
-
-	//Utilities
-	// #include "~/Desktop/automation/utilities/Utilities_Container.js";
-	// if(!devUtilities || $.getenv("USER") !== "will.dowling")
-	// {
-	// 	// //Production Utilities
-	// 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	// 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
-	// }
-	// else
-	// {
-	// 	//Dev Utilities
-	// 	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-	// 	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
-	// }
-
 	function getUtilities()
 	{
 		var result;
-		var user,networkPath,localPath,utilPath;
+		var networkPath,utilPath;
 		if($.os.match("Windows"))
 		{
-			user= $.getenv("USERNAME");
 			networkPath = "//AD4/Customization/";
 		}
 		else
 		{
-			user = $.getenv("USER");
 			networkPath = "/Volumes/Customization/";
-			localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
 		}
 
-		utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+
+		utilPath = decodeURI(networkPath + "Library/Scripts/Script Resources/Data/");
+
+		
 		if(Folder(utilPath).exists)
 		{
 			result = utilPath;
 		}
+
 		return result;
 
 	}
+
 	var utilitiesPath = getUtilities();
 	if(utilitiesPath)
 	{
