@@ -16,7 +16,6 @@ function loopArtLayers()
 	var len = artLay.layers.length;
 	var curLay,destLen,success;
 
-	var mockSizeLayer,mockSizeDest;
 
 
 	var func,art,loc,name,scale,dest,placement,layName,lowLayName;
@@ -67,7 +66,18 @@ function loopArtLayers()
 				}
 
 				
-				mockSizeDest = findSpecificPageItem(mockSizeLayer,loc);
+				mockSizeDest = findSpecificPageItem(mockSizeLayer,mockSizeLayer.name + " " + loc,"match");
+				// if(mockSizeDest)
+				// {
+				// 	if(mockSizeDest.length>1)
+				// 	{
+				// 		mockSizeDest = chooseFromListbox(mockSizeDest,"Select only one.");
+				// 	}
+				// 	else
+				// 	{
+				// 		mockSizeDest  = mockSizeDest[0];
+				// 	}
+				// }
 				
 				if(lowLayName.indexOf("front logo") > -1)
 				{
@@ -81,6 +91,7 @@ function loopArtLayers()
 					}
 					func = "Front Logo";
 					name = layName;
+					placement = getPlacement(art,mockSizeDest);
 				}
 
 
@@ -182,6 +193,7 @@ function loopArtLayers()
 	for(var loc=0,len = artLocs.length;loc<len && result;loc++)
 	{
 			var thisLoc = artLocs[loc];
+			mockSizeDest = findSpecificPageItem(mockSizeLayer,data.mockupSize + " " + thisLoc.loc,"match");
 			success = addArt[thisLoc.func](thisLoc.art,thisLoc.loc,thisLoc.name,thisLoc.scale,thisLoc.placement);
 	}
 

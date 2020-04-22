@@ -20,7 +20,7 @@ function garmentPrompt(garLayers)
 
 		//all the things button
 		var all = w.add("group");
-			var img = "/Volumes/Customization/Library/Scripts/Script Resources/Images/all.jpg";
+			var img = resourcePath + "Images/all.jpg";
 			var allButton = all.add("iconButton", undefined, img);
 			allButton.onClick = function()
 			{

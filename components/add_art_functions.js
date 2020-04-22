@@ -13,7 +13,7 @@
 
 
 var addArt = {
-	"Front Logo": function(logo, dest, name, sfl)
+	"Front Logo": function(logo, dest, name, sfl,placement)
 	{
 		var result = true;
 		log.h("Beginning execution of front logo function.");
@@ -70,8 +70,11 @@ var addArt = {
 			var result = true;
 			//get the dest piece for the mockup size to measure the 
 			//proportional placement
-			var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + dest];
-			var placement = getPlacement(logo, mockSizeDest);
+			// var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + dest];
+			if(!placement)
+			{
+				placement = getPlacement(logo, mockSizeDest);
+			}
 
 			result = addArt["Generic"](logo, dest, name, null, placement);
 
@@ -130,7 +133,7 @@ var addArt = {
 		var centerNumber = false;
 		var centerBuffer = 10;
 		var artCenter = art.left + art.width / 2;
-		var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + dest];
+		// var mockSizeDest = ppLay.layers[data.mockupSize].pageItems[data.mockupSize + " " + dest];
 		var mockSizeDestCenter = mockSizeDest.left + mockSizeDest.width/2;
 
 		var frontNumPlacement = {"vertSpace":undefined,"horzSpace":undefined,"counter":undefined,"inc":undefined,"center":undefined};
@@ -197,7 +200,7 @@ var addArt = {
 		var overflowLocs = [];
 
 		var mockSizeLay = findSpecificLayer(ppLay,data.mockupSize);
-		var mockSizeDest = findSpecificPageItem(mockSizeLay,dest);
+		// var mockSizeDest = findSpecificPageItem(mockSizeLay,dest);
 		if(isContainedWithin(art,mockSizeDest))
 		{
 			result = addArt["Generic"](art,dest,name,scale,placement);
@@ -311,7 +314,7 @@ var addArt = {
 		var result = true,
 			ppLen = ppLay.layers.length,
 			mockSizeLayer = findSpecificLayer(ppLay,data.mockupSize),
-			mockSizeDest = findSpecificPageItem(mockSizeLayer,data.mockupSize + " " + loc),
+			mockSizeDest = findSpecificPageItem(mockSizeLayer,data.mockupSize + " " + loc,"match"),
 			destLen,
 			curSize,
 			curLay,
