@@ -393,6 +393,7 @@ var addArt = {
 				}
 				else
 				{
+					log.l("moving " + artCopy.name + " to " + dest.name);
 					artCopy.moveToBeginning(dest);
 				}
 

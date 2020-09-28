@@ -193,6 +193,7 @@ function loopArtLayers()
 	for(var loc=0,len = artLocs.length;loc<len && result;loc++)
 	{
 			var thisLoc = artLocs[loc];
+			log.l("artLocs = " + artLocs.join("\n"));
 			mockSizeDest = findSpecificPageItem(mockSizeLayer,data.mockupSize + " " + thisLoc.loc,"match");
 			success = addArt[thisLoc.func](thisLoc.art,thisLoc.loc,thisLoc.name,thisLoc.scale,thisLoc.placement);
 	}
