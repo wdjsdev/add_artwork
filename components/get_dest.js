@@ -19,7 +19,15 @@ function getDest(art,mockSize)
 	log.h("Beginning execution of getDest function with arguments: ::art = " + art.parent.name + "::mockSize = " + mockSize);
 
 	var result = [];
-	var mockSizeLay = ppLay.layers[mockSize];
+	var mockSizeLay = findSpecificLayer(ppLay,mockSize);
+	if(!mockSizeLay)
+	{
+		var parentLayer = ppLay.parent.name;
+		errorList.push("Failed to find a size layer matching the mockup size: " + mockSize);
+		return result;
+	}
+
+
 	var len = mockSizeLay.groupItems.length;
 
 	for(var gd=0;gd<len;gd++)
@@ -52,13 +60,19 @@ function getDest(art,mockSize)
 		log.l("Checking to see whether these multiple overlaps are acceptable.");
 		//check whether the art SHOULD overlap two different pieces
 		//look for identically named pieces, like Front Left Leg piece of varying inseam sizes
-		if(samePieceNames(result))
-		{
-			result = [result[0]];
-		}
+		// if(samePieceNames(result))
+		// {
+		// 	result = [result[0]];
+		// }
+
+		//get unique entries of result array
+		result = getUnique(result);
+		log.l("unique dests = " + result.join(", "));
+
+
 		//look for multiple overlap between two different pieces
 		//for example front left and front right for a full button or full zip
-		else if(!properMultipleOverlap(result))
+		if(result.length > 1 && !properMultipleOverlap(result))
 		{
 			var userChoice = destPrompt(result,art);
 			if(!userChoice)

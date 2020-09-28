@@ -75,10 +75,12 @@ function addArtwork()
 
 	logDest.push(getLogDest());
 
+	
+
 	//get the components
 	var devPath = "~/Desktop/automation/add_artwork/components";
 	var prodPath = componentsPath + "add_artwork";
-	var componentFiles = includeComponents(devPath,prodPath,true);
+	var componentFiles = includeComponents(devPath,prodPath,false);
 
 	var curPath;
 	if(componentFiles)
