@@ -11,6 +11,8 @@ function addArtwork()
 		curGarment,
 		componentPath,
 		data,
+		mockupLayer,
+		paramLayer,
 		mockSizeLayer,
 		mockSizeDest,
 		ppLay,
@@ -71,7 +73,10 @@ function addArtwork()
 	if(!valid)return;
 
 
-
+	if(user === "will.dowling")
+	{
+		DEV_LOGGING = true;
+	}
 
 	logDest.push(getLogDest());
 
@@ -142,6 +147,10 @@ function addArtwork()
 	///Function Calls///
 	////////////////////
 
+	//find the mockup layer and paramcolors layer
+	var mockLay = findSpecificLayer(layers[0],"Mockup","any");
+	var paramLay = mockLay ? findSpecificLayer(mockLay,"param","any") : undefined;
+
 	if(valid)
 	{
 		if(!getGarments(layers))
@@ -157,6 +166,39 @@ function addArtwork()
 		{
 			valid = false;
 			log.e("masterLoop function failed.");
+		}
+	}
+
+	if(valid && paramLay)
+	{
+
+		//here's a set of users who are testing
+		//the functionality. if the current user
+		//is in this list, prompt them for whether 
+		//they want to use it.
+		var testUsers = ["will.dowling","mark.foust","tyler.peterman","yler","doug.french","aimee.myhre"];
+		var userPref = false;
+		if(testUsers.indexOf(user.toLowerCase())>-1)
+		{
+			var w = new Window("dialog");
+				var msg = UI.static(w,"Do you want to automatically recolor the prepress?");
+				var btnGroup = UI.group(w);
+					var noBtn = UI.button(btnGroup,"No",function()
+					{
+						userPref = false
+						w.close();
+					})
+					var yesBtn = UI.button(btnGroup,"Yes",function()
+					{
+						userPref = true;
+						w.close();
+					})
+			w.show();
+		}
+
+		if(userPref)
+		{
+			recolorGarment();
 		}
 	}
 
