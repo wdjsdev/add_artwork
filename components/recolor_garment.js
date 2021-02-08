@@ -20,6 +20,8 @@
 
 function recolorGarment()
 {
+
+	resetGraphicStylesToParamBlocks(paramLay);
 	var curBlock;
 	for(var x=0;x<paramLay.pageItems.length;x++)
 	{
@@ -56,6 +58,20 @@ function recolorGarment()
 			else if(curItem.typename === "CompoundPathItem" && curItem.pathItems.length)
 			{
 				gs.applyTo(curItem.pathItems[0]);
+				if(curItem.groupItems.length)
+				{
+					for(var g=0;len=curItem.groupItems.length;g<len;g++)
+					{
+						dig(curItem.groupItems[g]);
+					}
+				}
+			}
+			else if(curItem.typename === "CompoundPathItem" && curItem.groupItems.length)
+			{
+				for(var g=0;len=curItem.groupItems.length;g<len;g++)
+				{
+					dig(curItem.groupItems[g]);
+				}
 			}
 			else if(curItem.typename === "GroupItem")
 			{
