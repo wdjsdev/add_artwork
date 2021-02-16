@@ -93,7 +93,14 @@ function addArtwork()
 		for(var f=0;f<componentFiles.length;f++)
 		{
 			var thisComponent = componentFiles[f].fullName;
-			eval("#include \"" + thisComponent + "\"");
+			try
+			{
+				eval("#include \"" + thisComponent + "\"");
+			}
+			catch(e)
+			{
+				log.e("failed to include: " + componentFiles[f].name);
+			}
 		}
 	}
 	else
@@ -176,7 +183,7 @@ function addArtwork()
 		//the functionality. if the current user
 		//is in this list, prompt them for whether 
 		//they want to use it.
-		var testUsers = ["will.dowling","mark.foust","austin.clark","doug.french","aimee.myhre"];
+		var testUsers = ["will.dowling","mark.foust","austin.clark","doug.french","aimee.myhre","lee.williams"];
 		var userPref = false;
 		if(testUsers.indexOf(user.toLowerCase())>-1)
 		{

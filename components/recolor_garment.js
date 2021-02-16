@@ -57,18 +57,21 @@ function recolorGarment()
 			}
 			else if(curItem.typename === "CompoundPathItem" && curItem.pathItems.length)
 			{
-				gs.applyTo(curItem.pathItems[0]);
-				if(curItem.groupItems.length)
+				if(curItem.groupItems && curItem.groupItems.length)
 				{
-					for(var g=0;len=curItem.groupItems.length;g<len;g++)
+					for(var g=0,len=curItem.groupItems.length;g<len;g++)
 					{
 						dig(curItem.groupItems[g]);
 					}
 				}
+				if(curItem.pathItems && curItem.pathItems.length)
+				{
+					gs.applyTo(curItem.pathItems[0]);
+				}
 			}
 			else if(curItem.typename === "CompoundPathItem" && curItem.groupItems.length)
 			{
-				for(var g=0;len=curItem.groupItems.length;g<len;g++)
+				for(var g=0,len=curItem.groupItems.length;g<len;g++)
 				{
 					dig(curItem.groupItems[g]);
 				}
