@@ -183,7 +183,7 @@ function addArtwork()
 		//the functionality. if the current user
 		//is in this list, prompt them for whether 
 		//they want to use it.
-		var testUsers = ["will.dowling","mark.foust","austin.clark","doug.french","aimee.myhre","lee.williams"];
+		var testUsers = ["will.dowling","mark.foust","austin.clark","doug.french","aimee.myhre","lee.williams","medelyn.tavarez"];
 		var userPref = false;
 		if(testUsers.indexOf(user.toLowerCase())>-1)
 		{
