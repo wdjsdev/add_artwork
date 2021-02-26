@@ -183,11 +183,37 @@ function addArtwork()
 		//the functionality. if the current user
 		//is in this list, prompt them for whether 
 		//they want to use it.
-		var testUsers = ["will.dowling","mark.foust","austin.clark","doug.french","aimee.myhre","lee.williams","medelyn.tavarez"];
+
+
+		// var testUsers = ["will.dowling","mark.foust","austin.clark","doug.french","aimee.myhre","lee.williams","medelyn.tavarez"];
+		// var userPref = false;
+		// if(testUsers.indexOf(user.toLowerCase())>-1)
+		// {
+		// 	var w = new Window("dialog");
+		// 		var msg = UI.static(w,"Do you want to automatically recolor the prepress?");
+		// 		var btnGroup = UI.group(w);
+		// 			var noBtn = UI.button(btnGroup,"No",function()
+		// 			{
+		// 				userPref = false
+		// 				w.close();
+		// 			})
+		// 			var yesBtn = UI.button(btnGroup,"Yes",function()
+		// 			{
+		// 				userPref = true;
+		// 				w.close();
+		// 			})
+		// 	w.show();
+		// }
+
+		// if(userPref)
+		// {
+		// 	recolorGarment();
+		// }
+
+
+		//disabling the above in order to release this to all prod artists
 		var userPref = false;
-		if(testUsers.indexOf(user.toLowerCase())>-1)
-		{
-			var w = new Window("dialog");
+		var w = new Window("dialog");
 				var msg = UI.static(w,"Do you want to automatically recolor the prepress?");
 				var btnGroup = UI.group(w);
 					var noBtn = UI.button(btnGroup,"No",function()
@@ -201,7 +227,6 @@ function addArtwork()
 						w.close();
 					})
 			w.show();
-		}
 
 		if(userPref)
 		{
