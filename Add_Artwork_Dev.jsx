@@ -3,6 +3,7 @@ function addArtwork()
 {
 	//global variables
 	var docRef = app.activeDocument,
+		swatches = docRef.swatches,
 		layers = docRef.layers,
 		artboards = docRef.artboards,
 		valid = true,
@@ -173,6 +174,21 @@ function addArtwork()
 		{
 			valid = false;
 			log.e("masterLoop function failed.");
+		}
+	}
+
+	if(valid)
+	{
+		var dupSwatches = [];
+		//check to see if there are duplicate swatches
+		for(var x=0;x<swatches.length;x++)
+		{
+			if(/\sb[\d]$/i.test(swatches[x].name))
+				dupSwatches.push(swatches[x].name);
+		}
+		if(dupSwatches.length)
+		{
+			errorList.push("Don't forget to merge the following duplicate swatches:\n" + dupSwatches.join("\n"));
 		}
 	}
 

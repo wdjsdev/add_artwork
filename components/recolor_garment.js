@@ -98,6 +98,7 @@ function recolorGarment()
 		}
 		else
 		{
+			errorList.push("Please double check this artwork! There was no graphic style for " + name);
 			log.l("no graphic style existed for: " + name);
 			log.l("using simple fill color: " + paramBlock.fillColor.name);
 			docRef.defaultFillColor = paramBlock.fillColor;
