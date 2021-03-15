@@ -13,6 +13,7 @@
 
 function moveArtwork(data)
 {
+	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 	var result = true;
 	var coords = data.placement;
 	var unnamedPieces = [];

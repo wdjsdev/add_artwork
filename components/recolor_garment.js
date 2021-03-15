@@ -21,6 +21,30 @@
 function recolorGarment()
 {
 
+	var userPref = false;
+	var w = new Window("dialog");
+			var msg = UI.static(w,"Do you want to automatically recolor the prepress?");
+			var btnGroup = UI.group(w);
+				var noBtn = UI.button(btnGroup,"No",function()
+				{
+					userPref = false
+					w.close();
+				})
+				var yesBtn = UI.button(btnGroup,"Yes",function()
+				{
+					userPref = true;
+					w.close();
+				})
+		w.show();
+
+	if(!userPref)
+	{
+		return;
+	}
+
+
+	setPrepressLayersVisibility(garments,true);
+
 	resetGraphicStylesToParamBlocks(paramLay);
 	var curBlock;
 	for(var x=0;x<paramLay.pageItems.length;x++)
@@ -31,6 +55,8 @@ function recolorGarment()
 			processParamBlock(curBlock.name,curBlock);
 		}
 	}
+
+	setPrepressLayersVisibility(garments,false);
 
 	function processParamBlock(name,paramBlock)
 	{
@@ -69,7 +95,7 @@ function recolorGarment()
 					gs.applyTo(curItem.pathItems[0]);
 				}
 			}
-			else if(curItem.typename === "CompoundPathItem" && curItem.groupItems.length)
+			else if(curItem.typename === "CompoundPathItem" && curItem.groupItems)
 			{
 				for(var g=0,len=curItem.groupItems.length;g<len;g++)
 				{
