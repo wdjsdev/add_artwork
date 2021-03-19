@@ -168,9 +168,12 @@ function addArtwork()
 		}	
 	}
 
-	if(valid && paramLay)
+	if(valid)
 	{
-		recolorGarment();
+		if(paramLay)
+			recolorGarment();
+		else
+			errorList.push("Couldn't recolor the document because the Param Colors are missing.");
 	}
 
 	if(valid)

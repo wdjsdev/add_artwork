@@ -56,7 +56,7 @@ function recolorGarment()
 		}
 	}
 
-	setPrepressLayersVisibility(garments,false);
+	// setPrepressLayersVisibility(garments,false);
 
 	function processParamBlock(name,paramBlock)
 	{
