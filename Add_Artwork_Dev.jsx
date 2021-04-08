@@ -25,7 +25,7 @@ function addArtwork()
 
 	var scriptName = "add_artwork"; 
 
-	
+	app.coordinateSystem = CoordinateSystem.DOCUMENTCOORDINATESYSTEM;
 
 	function getUtilities()
 	{
@@ -166,6 +166,11 @@ function addArtwork()
 			valid = false;
 			log.e("getGarments function failed.");
 		}	
+	}
+
+	if(valid)
+	{
+		revealPrepressLayersAndItems();
 	}
 
 	if(valid)
