@@ -4,7 +4,8 @@ function revealPrepressLayersAndItems()
 	for (var x = 0; x < docRef.layers.length; x++)
 	{
 		ppLay = getPPLay(docRef.layers[x]);
-		if (!ppLay) continue;
+		if (!ppLay || !docRef.layers[x].visible || docRef.layers[x].locked) continue;
+
 		ppLayers.push(ppLay);
 	}
 
