@@ -52,12 +52,22 @@ function loopArtLayers()
 			for(var cd=0;cd<destLen && result;cd++)
 			{
 				loc = dest[cd];
+				// try
+				// {
+				// 	debugger;
+				// 	// mockSizeLayer = ppLay.layers[data.mockupSize];
 
-				try
-				{
-					mockSizeLayer = ppLay.layers[data.mockupSize];
-				}
-				catch(e)
+				// }
+				// catch(e)
+				// {
+				// 	errorList.push("Failed to find the mockup size prepress layer: " + data.mockupSize);
+				// 	log.e("File is missing the mockup size layer: " + data.mockupSize);
+				// 	result = false;
+				// 	return result;
+				// }
+
+				mockSizeLayer = findSpecificLayer(ppLay.layers,data.mockupSize + "","imatch");
+				if(!mockSizeLayer)
 				{
 					errorList.push("Failed to find the mockup size prepress layer: " + data.mockupSize);
 					log.e("File is missing the mockup size layer: " + data.mockupSize);
