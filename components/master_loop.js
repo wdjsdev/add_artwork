@@ -134,19 +134,28 @@ function masterLoop(garments)
 			result = false;
 		}
 
+		//
+		////disabled this in favor of using data in the existing
+		////central library databatase rather than an outside database
+		//
 		//check for any special instructions for this garment
-		if(specialInstructions[garCode])
+		// if(specialInstructions[garCode])
+		// {
+		// 	log.h("Beginning special instructions function for " + curGarment.name);
+		// 	try
+		// 	{
+		// 		specialInstructions[garCode]("add artwork");
+		// 	}
+		// 	catch(e)
+		// 	{
+		// 		log.e("Failed to execute the special instructions for the garment: " + garCode + "::error message: " + e + ", on line: " + e.line);
+		// 		result = false;
+		// 	}
+		// }
+
+		if(data.rotate)
 		{
-			log.h("Beginning special instructions function for " + curGarment.name);
-			try
-			{
-				specialInstructions[garCode]("add artwork");
-			}
-			catch(e)
-			{
-				log.e("Failed to execute the special instructions for the garment: " + garCode + "::error message: " + e + ", on line: " + e.line);
-				result = false;
-			}
+			rotatePieces(data.rotate);
 		}
 
 		if(!moveArtwork(data))
