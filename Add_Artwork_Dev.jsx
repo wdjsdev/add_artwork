@@ -197,8 +197,8 @@ function addArtwork()
 		if(paramLay)
 		{
 			recolorGarment();
-			debugger;
-			hideSuperfluousPrepressLayers(garments);
+
+			
 		}
 		else
 		{
@@ -230,6 +230,11 @@ function addArtwork()
 		}
 	}
 
+	if(valid)
+	{
+		//if any garment layers were not processed, hide the prepress layer
+		hideSuperfluousPrepressLayers();
+	}
 
 
 	if(errorList.length > 0)
