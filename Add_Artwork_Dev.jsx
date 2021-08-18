@@ -27,10 +27,27 @@ function addArtwork()
 
 	app.coordinateSystem = CoordinateSystem.DOCUMENTCOORDINATESYSTEM;
 
+	function isDrUser()
+	{
+		var files = Folder("/Volumes/").getFiles();
+
+		for(var x=0;x<files.length;x++)
+		{
+			if(files[x].name.toLowerCase().indexOf("customizationdr")>-1)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	function getUtilities()
 	{
 		var result = [];
-		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
+
+
+		var utilPath = "/Volumes/" + (isDrUser() ? "CustomizationDR" : "Customization") + "/Library/Scripts/Script_Resources/Data/";
 		var ext = ".jsxbin"
 
 		//check for dev utilities preference file
@@ -54,7 +71,7 @@ function addArtwork()
 		}
 
 		result.push(utilPath + "Utilities_Container" + ext);
-		result.push(utilPath + "Batch_Framework" + ext);
+
 
 		if(!result.length)
 		{
@@ -81,12 +98,14 @@ function addArtwork()
 
 	logDest.push(getLogDest());
 
-	
+
+
 
 	//get the components
 	var devPath = "~/Desktop/automation/add_artwork/components";
 	var prodPath = componentsPath + "add_artwork";
-	var componentFiles = includeComponents(devPath,prodPath,false);
+	// var componentFiles = includeComponents(devPath,prodPath,false);
+	var componentFiles = getComponents($.fileName.toLowerCase().indexOf("dev")>-1 ? devPath : prodPath);
 
 	var curPath;
 	if(componentFiles)
@@ -94,6 +113,7 @@ function addArtwork()
 		for(var f=0;f<componentFiles.length;f++)
 		{
 			var thisComponent = componentFiles[f].fullName;
+			log.l(thisComponent);
 			try
 			{
 				eval("#include \"" + thisComponent + "\"");
@@ -167,7 +187,6 @@ function addArtwork()
 			log.e("getGarments function failed.");
 		}	
 	}
-
 	if(valid)
 	{
 		revealPrepressLayersAndItems();
@@ -176,9 +195,15 @@ function addArtwork()
 	if(valid)
 	{
 		if(paramLay)
+		{
 			recolorGarment();
+			debugger;
+			hideSuperfluousPrepressLayers(garments);
+		}
 		else
+		{
 			errorList.push("Couldn't recolor the document because the Param Colors are missing.");
+		}
 	}
 
 	if(valid)
