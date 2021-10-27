@@ -24,9 +24,11 @@ function moveArtwork(data)
 	else if(!coords)
 	{
 		errorList.push("Could not find placment data for " + curGarment);
+		return;
 	}
 	var ppLen = ppLay.layers.length;
 	var pieceLen, curLay, curSize, curCoords, thisPiece;
+	var curVb;
 
 	for (var ma = 0; ma < ppLen && result; ma++)
 	{
@@ -55,8 +57,9 @@ function moveArtwork(data)
 					continue;
 				}
 				curCoords = coords[curSize][thisPiece.name];
-				thisPiece.left = curCoords[0];
-				thisPiece.top = curCoords[1];
+				curVb = getVisibleBounds(thisPiece);
+				thisPiece.left = curCoords[0] - (curVb[0] - thisPiece.left);
+				thisPiece.top = curCoords[1] + (thisPiece.top - curVb[1]);
 				if(thisPiece.name.toLowerCase().indexOf("outside cowl")>-1 || thisPiece.name.toLowerCase().indexOf("outside yoke") > -1)
 				{
 					thisPiece.rotate(180);
