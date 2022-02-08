@@ -155,7 +155,7 @@ function masterLoop(garments)
 
 		if(data.rotate)
 		{
-			rotatePieces(data.rotate);
+			rotatePieces(data.rotate,ppLay);
 		}
 
 		if(!moveArtwork(data))
