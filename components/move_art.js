@@ -38,8 +38,9 @@ function moveArtwork(data)
 		if(!coords[curSize])
 		{
 			errorList.push("Could not find placement data for " + curSize + ".");
-			result = false;
-			log.e("Failed to find placment data for " + curGarment + " : " + curSize + "::" + curGarment + ".placement = " + JSON.stringify(coords));
+			continue;
+			// result = false;
+			// log.e("Failed to find placment data for " + curGarment + " : " + curSize + "::" + curGarment + ".placement = " + JSON.stringify(coords));
 		}
 		else
 		{

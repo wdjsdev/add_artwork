@@ -25,7 +25,6 @@ function addArtwork()
 
 	var scriptName = "add_artwork"; 
 
-	app.coordinateSystem = CoordinateSystem.DOCUMENTCOORDINATESYSTEM;
 
 	function isDrUser()
 	{
