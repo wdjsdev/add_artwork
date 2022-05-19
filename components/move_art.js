@@ -61,10 +61,13 @@ function moveArtwork(data)
 				curVb = getVisibleBounds(thisPiece);
 				thisPiece.left = curCoords[0] - (curVb[0] - thisPiece.left);
 				thisPiece.top = curCoords[1] + (thisPiece.top - curVb[1]);
-				if(thisPiece.name.toLowerCase().indexOf("outside cowl")>-1 || thisPiece.name.toLowerCase().indexOf("outside yoke") > -1)
-				{
-					thisPiece.rotate(180);
-				}
+
+				//removed this logic because it's handled in the masterLoop function 
+				//with the rotation info in the database
+				// if(thisPiece.name.toLowerCase().indexOf("outside cowl")>-1 || thisPiece.name.toLowerCase().indexOf("outside yoke") > -1)
+				// {
+				// 	thisPiece.rotate(180);
+				// }
 			}
 		}
 	}
