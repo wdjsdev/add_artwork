@@ -18,26 +18,28 @@ function findActiveArtboard(currentWearer)
 	//set activeArtboardIndex to the container artboard
 	var result = false;
 	var destArtboard;
-	var orderNumberFrames = findAllPageItems(infoLay,"Order Number","imatch");
-	if(orderNumberFrames.length)
+
+	var frames = afc(infoLay,"textFrames");
+	frames.forEach(function(frame)
 	{
-		for(var a=0;a<artboards.length && !destArtboard;a++)
+		if(frame.name.match(/order|garment|descript|front|initial/i))
 		{
-			for(var f=0;f<orderNumberFrames.length && !destArtboard;f++)
+			afc(app.activeDocument,"artboards").forEach(function(artboard,index)
 			{
-				if(isContainedWithinBuffer(orderNumberFrames[f],artboards[a],200))
+				if(destArtboard)
 				{
-					destArtboard = orderNumberFrames[f];
-					artboards.setActiveArtboardIndex(a);
+					return;
 				}
-			}
+				if(isContainedWithinBuffer(frame,artboard,200))
+				{
+					destArtboard = artboard;
+					app.activeDocument.artboards.setActiveArtboardIndex(index);
+				}
+			});
 		}
-		
-	}
-	else
-	{
-		errorList.push(currentWearer.name + " is missing the order number text.");
-	}
+	});
+
+	// 
 
 	if(!destArtboard)
 	{
