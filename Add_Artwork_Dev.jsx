@@ -26,44 +26,44 @@ function addArtwork ()
 	var scriptName = "add_artwork";
 
 
-	// function getUtilities ()
-	// {
-	// 	var utilNames = [ "Utilities_Container" ]; //array of util names
-	// 	var utilFiles = []; //array of util files
-	// 	//check for dev mode
-	// 	var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
-	// 	function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
-	// 	if ( devUtilitiesPreferenceFile.exists && readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
-	// 	{
-	// 		$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
-	// 		var devUtilPath = "~/Desktop/automation/utilities/";
-	// 		utilFiles =[ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
-	// 		return utilFiles;
-	// 	}
+	function getUtilities ()
+	{
+		var utilNames = [ "Utilities_Container" ]; //array of util names
+		var utilFiles = []; //array of util files
+		//check for dev mode
+		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
+		function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
+		if ( devUtilitiesPreferenceFile.exists && readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
+		{
+			$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
+			var devUtilPath = "~/Desktop/automation/utilities/";
+			utilFiles = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+			return utilFiles;
+		}
 
-	// 	var dataResourcePath = customizationPath + "Library/Scripts/Script_Resources/Data/";
+		var dataResourcePath = customizationPath + "Library/Scripts/Script_Resources/Data/";
 
-	// 	for(var u=0;u<utilNames.length;u++)
-	// 	{
-	// 		var utilFile = new File(dataResourcePath + utilNames[u] + ".jsxbin");
-	// 		if(utilFile.exists)
-	// 		{
-	// 			utilFiles.push(utilFile);	
-	// 		}
+		for ( var u = 0; u < utilNames.length; u++ )
+		{
+			var utilFile = new File( dataResourcePath + utilNames[ u ] + ".jsxbin" );
+			if ( utilFile.exists )
+			{
+				utilFiles.push( utilFile );
+			}
 
-	// 	}
+		}
 
-	// 	if(!utilFiles.length)
-	// 	{
-	// 		alert("Could not find utilities. Please ensure you're connected to the appropriate Customization drive.");
-	// 		return [];
-	// 	}
+		if ( !utilFiles.length )
+		{
+			alert( "Could not find utilities. Please ensure you're connected to the appropriate Customization drive." );
+			return [];
+		}
 
 
-	// 	return utilFiles;
+		return utilFiles;
 
-	// }
-	// var utilities = getUtilities();
+	}
+	var utilities = getUtilities();
 
 	for ( var u = 0, len = utilities.length; u < len && valid; u++ )
 	{
@@ -81,7 +81,11 @@ function addArtwork ()
 	logDest.push( getLogDest() );
 
 
+	var aaTimer = new Stopwatch();
+	aaTimer.logStart();
 
+	aaTimer.beginTask( "Add Artwork" );
+	aaTimer.beginTask( "getComponents" );
 
 	//get the components
 	var devPath = "~/Desktop/automation/add_artwork/components";
@@ -112,6 +116,8 @@ function addArtwork ()
 		errorList.push( "Failed to find the necessary component files." );
 	}
 
+	aaTimer.endTask( "getComponents" );
+
 	///////Begin/////////
 	///Logic Container///
 	/////////////////////
@@ -132,8 +138,12 @@ function addArtwork ()
 	////Data Storage////
 	////////////////////
 
+	aaTimer.beginTask( "getData" )
+
 	eval( "#include \"" + dataPath + "central_library.js\"" );
 	eval( "#include \"" + dataPath + "aa_special_instructions.js\"" );
+
+	aaTimer.endTask( "getData" )
 
 	var library = prepressInfo;
 
@@ -178,7 +188,9 @@ function addArtwork ()
 	{
 		if ( paramLay )
 		{
+			aaTimer.beginTask( "recolorGarment" );
 			recolorGarment();
+			aaTimer.endTask( "recolorGarment" );
 
 
 		}
@@ -190,11 +202,13 @@ function addArtwork ()
 
 	if ( valid )
 	{
+		aaTimer.beginTask( "masterLoop" );
 		if ( !masterLoop( garments ) )
 		{
 			valid = false;
 			log.e( "masterLoop function failed." );
 		}
+		aaTimer.endTask( "masterLoop" );
 	}
 
 	if ( valid )
@@ -223,6 +237,8 @@ function addArtwork ()
 	{
 		sendErrors( errorList );
 	}
+
+	aaTimer.endTask( "Add Artwork" );
 
 	printLog();
 	return valid;
