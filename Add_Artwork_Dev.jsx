@@ -184,20 +184,11 @@ function addArtwork ()
 		revealPrepressLayersAndItems();
 	}
 
-	if ( valid )
+	if ( valid && paramLay )
 	{
-		if ( paramLay )
-		{
-			aaTimer.beginTask( "recolorGarment" );
-			recolorGarment();
-			aaTimer.endTask( "recolorGarment" );
-
-
-		}
-		else
-		{
-			errorList.push( "Couldn't recolor the document because the Param Colors are missing." );
-		}
+		aaTimer.beginTask( "recolorGarment" );
+		recolorGarment();
+		aaTimer.endTask( "recolorGarment" );
 	}
 
 	if ( valid )
