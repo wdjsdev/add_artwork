@@ -13,33 +13,37 @@
 
 */
 
-function destPrompt(dests,art)
+function destPrompt ( args )
 {
 	var result;
 	var btns = [];
 
-	var w = new Window("dialog", "Select the desired destination.");
-		var topTxt1 = w.add("statictext", undefined, curGarment.name);
-		var topTxt2 = w.add("statictext", undefined, "The artwork on layer: " + art.parent.name + " overlaps multiple garment pieces.");
-		var topTxt3 = w.add("statictext", undefined, "Select the correct destination for the artwork");
-		var btnGroup = w.add("group");
-		var len = dests.length;
-		for(var x=0;x<len;x++)
-		{
-			makeButton(dests[x],x);
-		}
+	var garmentLabel = args.curGarLayName;
+	var art = args.art;
+	var dests = args.pieceNames;
+
+	var w = new Window( "dialog", "Select the desired destination." );
+	var topTxt1 = w.add( "statictext", undefined, args.curGarLayName );
+	var topTxt2 = w.add( "statictext", undefined, "The artwork on layer: " + art.parent.name + " overlaps multiple garment pieces." );
+	var topTxt3 = w.add( "statictext", undefined, "Select the correct destination for the artwork" );
+	var btnGroup = w.add( "group" );
+	var len = dests.length;
+	for ( var x = 0; x < len; x++ )
+	{
+		makeButton( dests[ x ], x );
+	}
 
 	w.show();
 
 	return result;
 
 
-	function makeButton(txt,x)
+	function makeButton ( txt, x )
 	{
-		btns[x] = btnGroup.add("button", undefined, txt);
-		btns[x].onClick = function()
+		btns[ x ] = btnGroup.add( "button", undefined, txt );
+		btns[ x ].onClick = function ()
 		{
-			result = btns[x].text;
+			result = btns[ x ].text;
 			w.close();
 		}
 	}

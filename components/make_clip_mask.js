@@ -3,26 +3,19 @@
 	Author: William Dowling
 	Creation Date: 10 July, 2017
 	Description: 
-		make a clipping mask out of the dest piece and place the art inside the mask
-	Arguments
-		art = the artwork to put inside the mask
-		dest = the shirt piece to make a mask out of
-	Return value
-		the clipping mask object
-
+		make a clipping mask out of the largest path in the dest piece 
 */
 
-function makeClipMask(art, dest) {
-	var bounds = [dest.top, dest.left, dest.width, dest.height];
-	var tmpLay = docRef.layers.add();
-	tmpLay.name = "temporary";
-	var clip = tmpLay.pathItems.rectangle(bounds[0], bounds[1], bounds[2], bounds[3]);
-	art.move(dest, ElementPlacement.PLACEATBEGINNING);
-	var clipGroup = dest.groupItems.add();
-	clipGroup.name = "Clipping Mask";
-	art.move(clipGroup, ElementPlacement.PLACEATBEGINNING);
-	clip.move(clipGroup, ElementPlacement.PLACEATBEGINNING);
-	clip.clipping = true;
-	clipGroup.clipped = true;
-	tmpLay.remove();
+function makeClipMask ( destPiece )
+{
+	var lp = findLargestPath( destPiece );
+	clipMask = lp.duplicate( destPiece, ElementPlacement.PLACEATBEGINNING );
+	if ( clipMask.typename.match( /compoundpath/i ) )
+	{
+		clipMask = clipMask.pathItems[ 0 ];
+	}
+	clipMask.clipping = true;
+	clipMask.name = "clip mask";
+	clipMask.moveToBeginning( destPiece );
+	destPiece.clipped = true;
 }

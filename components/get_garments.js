@@ -21,10 +21,9 @@
 
 */
 
-function getGarments(layers)
+function getGarments ( layers )
 {
-	log.h("Beginning of getGarments function.");
-	var result = true;
+	log.h( "Beginning of getGarments function." );
 	var validGarments = [];
 	var selectedGarments = [];
 
@@ -32,52 +31,42 @@ function getGarments(layers)
 	//converted template components such as Artwork Layer and Prepress
 	//if true, push to validGarments array
 
-	var layLength = layers.length;
-	var thisLay, subLays, subLength,cont;
-	for(var a=0;a<layLength;a++)
+	layers.forEach( function ( curLay, index )
 	{
-		thisLay = layers[a];
-		subLays = thisLay.layers;
-		subLength = subLays.length;
-		cont = true; //continuation variable. if this is false, a match has been found, exit sub layer loop
-
-		//loop the sub layers to check for existence of proper sublayers
-		for(var sl=0;sl<subLength && cont;sl++)
+		var ppl = findSpecificLayer( curLay, "Prepress" );
+		var il = findSpecificLayer( curLay, "Information" );
+		var al = findSpecificLayer( curLay, "Artwork", "any" );
+		var cil = il ? findSpecificLayer( il, "Prepress Completed" ) : undefined;
+		if ( ppl && al && il && !cil )
 		{
-			var thisSubLay = subLays[sl];
-			if(thisSubLay.name.toLowerCase() === "prepress" && thisSubLay.layers.length > 0)
-			{
-				cont = false;
-				validGarments.push(thisLay);
-				log.l(thisLay.name + " is a valid garment.");
-			}
+			validGarments.push( curLay );
 		}
-	}
+	} )
 
-	if(validGarments.length === 0)
+	//if no valid garments were found, log an error and return false
+	//otherwise, if only one valid garment was found, push it to the
+	//selectedGarments array and continue
+	//otherwise, if multiple valid garments were found, call the
+	//garmentPrompt component to display a dialog asking the user
+	//which garment they wish to add artwork to.
+	//add the selected garment(s) to the selectedGarments array
+	//and finally return the array of selected garments
+	if ( !validGarments.length )
 	{
-		log.l("No valid garments were found in the document.");
-		errorList.push("No valid garments were found in the document.");
-		result = false;
+		log.e( "No valid garments were found in the document." );
+		errorList.push( "No valid garments were found in the document.\nCheck for an errant 'Prepress Completed' indicator." );
+		return [];
 	}
-	else if(validGarments.length === 1)
+	else if ( validGarments.length === 1 )
 	{
-		selectedGarments = validGarments;
+		return validGarments;
 	}
 	else
 	{
-		selectedGarments = garmentPrompt(validGarments);
+		selectedGarments = garmentPrompt( validGarments );
 	}
 
-	if(selectedGarments.length === 0)
-	{
-		log.l("User cancelled garmentPrompt.");
-		result = false;
-	}
-	else
-	{
-		garments = selectedGarments;
-	}
+	return selectedGarments;
 
-	return result;
+
 }

@@ -7,70 +7,37 @@
 	Arguments
 		garment layer
 	Return value
-		success boolean
+		nothing
 
 */
 
-function findActiveArtboard(currentWearer)
+function setActiveArtboard ( curGarmentLayer )
 {
 	// check to see which artboard the order number
 	//text frame is contained within. 
 	//set activeArtboardIndex to the container artboard
-	var result = false;
+	var result = 0;
 	var destArtboard;
-
-	var frames = afc(infoLay,"textFrames");
-	frames.forEach(function(frame)
+	var infoLay = findSpecificLayer( curGarmentLayer, "Information" );
+	var frames = afc( infoLay, "textFrames" );
+	frames.forEach( function ( frame )
 	{
-		if(frame.name.match(/order|garment|descript|front|initial/i))
+		if ( frame.name.match( /order|garment|descript|front|initial/i ) )
 		{
-			afc(app.activeDocument,"artboards").forEach(function(artboard,index)
+			afc( app.activeDocument, "artboards" ).forEach( function ( artboard, index )
 			{
-				if(destArtboard)
+				if ( destArtboard )
 				{
 					return;
 				}
-				if(isContainedWithinBuffer(frame,artboard,200))
+				if ( isContainedWithinBuffer( frame, artboard, 200 ) )
 				{
 					destArtboard = artboard;
-					app.activeDocument.artboards.setActiveArtboardIndex(index);
+					result = index;
 				}
-			});
+			} );
 		}
-	});
+	} );
 
-	// 
-
-	if(!destArtboard)
-	{
-		artboards.setActiveArtboardIndex(0);
-	}
-
-	result = true;
-
-	// var vB = orderNumberFrame.visibleBounds;
-	// var pB = {"left": vB[0], "top": vB[1], "right": vB[2], "bot": vB[3]};
-
-	// var buffer = 100;
-	// debugger;
-	// for(var ab=0;ab<artboards.length && !result;ab++)
-	// {
-	// 	var cur = artboards[ab].artboardRect;
-	// 	var thisAb = {"left": cur[0], "top": cur[1], "right":cur[2], "bot":cur[3]};
-	// 	log.l("thisAb = " + JSON.stringify(thisAb) + "::");
-	// 	log.l("pB = " + JSON.stringify(pB));
-	// 	if(!((pB.left < thisAb.left - buffer) || (pB.top > thisAb.top + buffer) || (pB.right > thisAb.right + buffer) || pB.bot < thisAb.bot - buffer))
-	// 	{
-	// 		log.l("Setting active artboard index to: " + ab);
-	// 		artboards.setActiveArtboardIndex(ab);
-	// 		result = true;
-	// 	}
-	// }
-
-	// if(!result)
-	// {
-	// 	errorList.push("Failed to find the artboard associated with " + currentWearer.name);
-	// }
-
-	return result;
+	app.activeDocument.artboards.setActiveArtboardIndex( result );
 }

@@ -8,7 +8,7 @@ function addArtwork ()
 		artboards = docRef.artboards,
 		valid = true,
 		versionNum,
-		garments,
+		garmentLayers,
 		curGarment,
 		componentPath,
 		data,
@@ -134,29 +134,7 @@ function addArtwork ()
 	/*****************************************************************************//*****************************************************************************/
 	/*****************************************************************************//*****************************************************************************/
 
-	///////Begin////////
-	////Data Storage////
-	////////////////////
 
-	aaTimer.beginTask( "getData" )
-
-	eval( "#include \"" + dataPath + "central_library.js\"" );
-	eval( "#include \"" + dataPath + "aa_special_instructions.js\"" );
-
-	aaTimer.endTask( "getData" )
-
-	var library = prepressInfo;
-
-	if ( library == undefined )
-	{
-		log.e( "Failed to identify the central library file::Tried to find central_library.js in the following location:::/Volumes/Customization/Library/Scripts/Script Resources/Data/central_library.js" )
-		errorList.push( "Failed to open the library file. Aborting" )
-		valid = false;
-	}
-
-	////////End/////////
-	////Data Storage////
-	////////////////////
 
 	/*****************************************************************************//*****************************************************************************/
 	/*****************************************************************************//*****************************************************************************/
@@ -167,25 +145,25 @@ function addArtwork ()
 	///Function Calls///
 	////////////////////
 
+	docRef.selection = null;
+
 	//find the mockup layer and paramcolors layer
 	var mockLay = findSpecificLayer( layers[ 0 ], "Mockup", "any" );
 	var paramLay = mockLay ? findSpecificLayer( mockLay, "param", "any" ) : undefined;
 
 	if ( valid )
 	{
-		if ( !getGarments( layers ) )
+		garmentLayers = getGarments( afc( docRef, "layers" ) );
+		if ( garmentLayers.length === 0 )
 		{
 			valid = false;
-			log.e( "getGarments function failed." );
+			errorList.push( "Failed to find any garments." );
 		}
-	}
-	if ( valid )
-	{
-		revealPrepressLayersAndItems();
 	}
 
 	if ( valid && paramLay )
 	{
+		setPrepressLayersVisibility( garmentLayers, true );
 		aaTimer.beginTask( "recolorGarment" );
 		recolorGarment();
 		aaTimer.endTask( "recolorGarment" );
@@ -194,7 +172,7 @@ function addArtwork ()
 	if ( valid )
 	{
 		aaTimer.beginTask( "masterLoop" );
-		if ( !masterLoop( garments ) )
+		if ( !masterLoop( garmentLayers ) )
 		{
 			valid = false;
 			log.e( "masterLoop function failed." );
@@ -206,11 +184,28 @@ function addArtwork ()
 	{
 		var dupSwatches = [];
 		//check to see if there are duplicate swatches
-		for ( var x = 0; x < swatches.length; x++ )
+		afc( docRef, "swatches" ).forEach( function ( swatch )
 		{
-			if ( /\sb[\d]$/i.test( swatches[ x ].name ) )
-				dupSwatches.push( swatches[ x ].name );
-		}
+			try
+			{
+				var swatchName = swatch.name;
+			}
+			catch ( e )
+			{
+				return;
+			}
+			if ( swatchName.match( /\sb[\d]$/i ) )
+				dupSwatches.push( swatchName );
+		} );
+		// for ( var x = 0; x < swatches.length; x++ )
+		// {
+		// 	try 
+		// 	{
+
+		// 	}
+		// 	if ( /\sb[\d]$/i.test( swatches[ x ].name ) )
+		// 		dupSwatches.push( swatches[ x ].name );
+		// }
 		if ( dupSwatches.length )
 		{
 			errorList.push( "Don't forget to merge the following duplicate swatches:\n" + dupSwatches.join( "\n" ) );
@@ -223,6 +218,7 @@ function addArtwork ()
 		hideSuperfluousPrepressLayers();
 	}
 
+	docRef.selection = null;
 
 	if ( errorList.length > 0 )
 	{

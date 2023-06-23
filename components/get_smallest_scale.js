@@ -13,26 +13,39 @@
 
 */
 
-function getSmallestScale() {
+function getSmallestScale ( data )
+{
 	var counter = 0;
-	var slowpitch = false;
-	for (var size in data.placement) {
-		if (size == "Regular" || size == "Raglan") {
-			slowpitch = true;
-			break;
-		}
-		if (size == data.mockupSize) {
+	for ( var curSize in data.placement )
+	{
+		if ( curSize == data.mockupSize )
+		{
 			break;
 		}
 		counter++;
 	}
-	if (slowpitch) {
-		for (var size in data.placement["Regular"]) {
-			if (size == data.mockupSize) {
-				break;
-			}
-			counter++;
-		}
-	}
 	return counter;
+
+
+
+	// var slowpitch = false;
+	// for (var size in data.placement) {
+	// 	if (size == "Regular" || size == "Raglan") {
+	// 		slowpitch = true;
+	// 		break;
+	// 	}
+	// 	if (size == data.mockupSize) {
+	// 		break;
+	// 	}
+	// 	counter++;
+	// }
+	// if (slowpitch) {
+	// 	for (var size in data.placement["Regular"]) {
+	// 		if (size == data.mockupSize) {
+	// 			break;
+	// 		}
+	// 		counter++;
+	// 	}
+	// }
+	// return counter;
 }

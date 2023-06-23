@@ -18,117 +18,117 @@
 
 */
 
-function recolorGarment()
+function recolorGarment ()
 {
 
-	var userPref = false;
-	var w = new Window("dialog");
-			var msg = UI.static(w,"Do you want to automatically recolor the prepress?");
-			var btnGroup = UI.group(w);
-				var noBtn = UI.button(btnGroup,"No",function()
-				{
-					userPref = false
-					w.close();
-				})
-				var yesBtn = UI.button(btnGroup,"Yes",function()
-				{
-					userPref = true;
-					w.close();
-				})
-		w.show();
+	// var userPref = false;
+	// var w = new Window("dialog");
+	// 		var msg = UI.static(w,"Do you want to automatically recolor the prepress?");
+	// 		var btnGroup = UI.group(w);
+	// 			var noBtn = UI.button(btnGroup,"No",function()
+	// 			{
+	// 				userPref = false
+	// 				w.close();
+	// 			})
+	// 			var yesBtn = UI.button(btnGroup,"Yes",function()
+	// 			{
+	// 				userPref = true;
+	// 				w.close();
+	// 			})
+	// 	w.show();
 
-	if(!userPref)
-	{
-		return;
-	}
+	// if(!userPref)
+	// {
+	// 	return;
+	// }
 
 
-	setPrepressLayersVisibility(garments,true);
 
-	resetGraphicStylesToParamBlocks(paramLay);
+
+	resetGraphicStylesToParamBlocks( paramLay );
 	var curBlock;
-	for(var x=0;x<paramLay.pageItems.length;x++)
+	for ( var x = 0; x < paramLay.pageItems.length; x++ )
 	{
-		curBlock = paramLay.pageItems[x];
-		if(/c[\d]{1,2}/i.test(curBlock.name))
+		curBlock = paramLay.pageItems[ x ];
+		if ( /c[\d]{1,2}/i.test( curBlock.name ) )
 		{
-			processParamBlock(curBlock.name,curBlock);
+			processParamBlock( curBlock );
 		}
 	}
 
 	// setPrepressLayersVisibility(garments,false);
 
-	function processParamBlock(name,paramBlock)
+	function processParamBlock ( paramBlock )
 	{
-		name = name.replace("paramcolor-","");
-		log.l("Attempting to recolor: " + name);
+		var name = paramBlock.name.replace( "paramcolor-", "" );
+		log.l( "Attempting to recolor: " + name );
 		//look for the graphic style
-		var gs = findSpecificGraphicStyle(docRef,name);
-		var placeholderSwatch = makeNewSpotColor(name);
+		var gs = findSpecificGraphicStyle( docRef, name );
+		var placeholderSwatch = makeNewSpotColor( name );
 		//select all items that match the fill color "name"
-		
-		if(docRef.selection && docRef.selection.length > 0)
+
+		if ( docRef.selection && docRef.selection.length > 0 )
 		{
 			docRef.selection = null;
 		}
 		docRef.defaultFillColor = placeholderSwatch.color;
-		docRef.defaultStrokeColor = docRef.swatches["[None]"].color;
-		app.executeMenuCommand("Find Fill Color menu item");
+		docRef.defaultStrokeColor = docRef.swatches[ "[None]" ].color;
+		app.executeMenuCommand( "Find Fill Color menu item" );
 
-		function dig(curItem)
+		function dig ( curItem )
 		{
-			if(curItem.typename === "PathItem")
+			if ( curItem.typename === "PathItem" )
 			{
-				gs.applyTo(curItem);
+				gs.applyTo( curItem );
 			}
-			else if(curItem.typename === "CompoundPathItem" && curItem.pathItems.length)
+			else if ( curItem.typename === "CompoundPathItem" && curItem.pathItems.length )
 			{
-				if(curItem.groupItems && curItem.groupItems.length)
+				if ( curItem.groupItems && curItem.groupItems.length )
 				{
-					for(var g=0,len=curItem.groupItems.length;g<len;g++)
+					for ( var g = 0, len = curItem.groupItems.length; g < len; g++ )
 					{
-						dig(curItem.groupItems[g]);
+						dig( curItem.groupItems[ g ] );
 					}
 				}
-				if(curItem.pathItems && curItem.pathItems.length)
+				if ( curItem.pathItems && curItem.pathItems.length )
 				{
-					gs.applyTo(curItem.pathItems[0]);
+					gs.applyTo( curItem.pathItems[ 0 ] );
 				}
 			}
-			else if(curItem.typename === "CompoundPathItem" && curItem.groupItems)
+			else if ( curItem.typename === "CompoundPathItem" && curItem.groupItems )
 			{
-				for(var g=0,len=curItem.groupItems.length;g<len;g++)
+				for ( var g = 0, len = curItem.groupItems.length; g < len; g++ )
 				{
-					dig(curItem.groupItems[g]);
+					dig( curItem.groupItems[ g ] );
 				}
 			}
-			else if(curItem.typename === "GroupItem")
+			else if ( curItem.typename === "GroupItem" )
 			{
-				for(var g=0,len=curItem.pageItems.length;g<len;g++)
+				for ( var g = 0, len = curItem.pageItems.length; g < len; g++ )
 				{
-					dig(curItem.pageItems[g]);
+					dig( curItem.pageItems[ g ] );
 				}
 			}
 		}
 
-		
-		if(gs)
+
+		if ( gs )
 		{
-			var curSel,item;
-			for(var cc=0,len=docRef.selection.length;cc<len;cc++)
+			var curSel, item;
+			for ( var cc = 0, len = docRef.selection.length; cc < len; cc++ )
 			{
-				dig(docRef.selection[cc]);
+				dig( docRef.selection[ cc ] );
 				item = undefined;
 			}
-			log.l("finished applying the graphic style: " + name + " to all selected pageItems.");
+			log.l( "finished applying the graphic style: " + name + " to all selected pageItems." );
 		}
 		else
 		{
-			errorList.push("Please double check this artwork! There was no graphic style for " + name);
-			log.l("no graphic style existed for: " + name);
-			log.l("using simple fill color: " + paramBlock.fillColor.name);
+			errorList.push( "Please double check this artwork! There was no graphic style for " + name );
+			log.l( "no graphic style existed for: " + name );
+			log.l( "using simple fill color: " + paramBlock.fillColor.name );
 			docRef.defaultFillColor = paramBlock.fillColor;
 		}
-		
+
 	}
 }

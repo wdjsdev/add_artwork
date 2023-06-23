@@ -17,35 +17,31 @@
 
 */
 
-function completedIndicator(task,layer)
+function completedIndicator ( task, layer )
 {
-	log.h("Beginning completedIndicator function for " + layer.name + ".::Performing task: " + task + ".");
+	log.h( "Beginning completedIndicator function for " + layer.name + ".::Performing task: " + task + "." );
 	var result = false;
 
-	if(infoLay)
+	if ( infoLay )
 	{
-		if(task === "add")
+		if ( task === "add" )
 		{
 			var indicator = infoLay.layers.add();
 			indicator.name = "Prepress Completed";
 			result = true;
-			log.l("Successfully added the 'prepress completed' indicator");
+			log.l( "Successfully added the 'prepress completed' indicator" );
 		}
-		else if(task === "check")
+		else if ( task === "check" )
 		{
 			var len = infoLay.layers.length;
-			for(var ci=0;ci<len && !result;ci++)
+			for ( var ci = 0; ci < len && !result; ci++ )
 			{
-				var thisLay = infoLay.layers[ci];
-				if(thisLay.name.toLowerCase() === "prepress completed")
+				var thisLay = infoLay.layers[ ci ];
+				if ( thisLay.name.toLowerCase() === "prepress completed" )
 				{
 					result = true;
-					log.l("Prepress Complete indicator was found.")
+					log.l( "Prepress Complete indicator was found." )
 				}
-			}
-			if(!result)
-			{
-				log.l("No Prepress Complete indicator found.");
 			}
 		}
 

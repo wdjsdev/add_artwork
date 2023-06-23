@@ -11,8 +11,11 @@
 
 */
 
-function moveArtwork ( data )
+function moveArtwork ( data, ppLay )
 {
+	var garmentLabel = ppLay.parent.name;
+	log.l( "moving artwork for " + garmentLabel );
+	aaTimer.beginTask( "moveArtwork for " + garmentLabel );
 	app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 	var result = true;
 	var coords = data.placement;
@@ -26,47 +29,68 @@ function moveArtwork ( data )
 		errorList.push( "Could not find placment data for " + curGarment );
 		return;
 	}
-	var ppLen = ppLay.layers.length;
-	var pieceLen, curLay, curSize, curCoords, thisPiece;
-	var curVb;
-
-	for ( var ma = 0; ma < ppLen && result; ma++ )
+	var sizeLayers = afc( ppLay, "layers" );
+	sizeLayers.forEach( function ( curSizeLay )
 	{
-		curLay = ppLay.layers[ ma ];
-		curSize = ppLay.layers[ ma ].name;
-		pieceLen = curLay.groupItems.length;
+		var curSize = curSizeLay.name;
 		if ( !coords[ curSize ] )
 		{
 			errorList.push( "Could not find placement data for " + curSize + "." );
-			continue;
+			return;
 		}
 
-		aaTimer.beginTask( "move" + curSize );
+		aaTimer.beginTask( "moving " + curSize );
 
-
-		for ( var p = 0; p < pieceLen; p++ )
+		afc( curSizeLay, "groupItems" ).forEach( function ( curPiece )
 		{
-			thisPiece = curLay.groupItems[ p ];
-			if ( thisPiece.name === "" )
+			if ( curPiece.name === "" )
 			{
-				unnamedPieces.push( thisPiece );
-				continue;
+				unnamedPieces.push( curPiece );
+				return;
 			}
-			else if ( !coords[ curSize ][ thisPiece.name ] )
+			else if ( !coords[ curSize ][ curPiece.name ] )
 			{
-				errorList.push( "Could not find placement data for " + thisPiece.name + ".\nThis piece has been skipped." );
-				continue;
+				errorList.push( "Could not find placement data for " + curPiece.name + ".\nThis piece has been skipped." );
+				return;
 			}
-			curCoords = coords[ curSize ][ thisPiece.name ];
 
-			curVb = getVisibleBounds( thisPiece );
-			thisPiece.left = curCoords[ 0 ] - ( curVb[ 0 ] - thisPiece.left );
-			thisPiece.top = curCoords[ 1 ] + ( thisPiece.top - curVb[ 1 ] );
+			if ( data.rotate )
+			{
+				aaTimer.beginTask( "rotating " + curPiece.name );
+				var curName = curPiece.name.replace( /[^\s]*\s/, "" );
+				data.rotate.forEach( function ( curRot )
+				{
+					if ( curRot.pieces.indexOf( curName ) > -1 )
+					{
+						curPiece.rotate( curRot.angle );
+					}
+				} );
+				aaTimer.endTask( "rotating " + curPiece.name );
+			}
 
-		}
+			aaTimer.beginTask( "moving " + curPiece.name );
 
-		aaTimer.endTask( "move" + curSize );
-	}
+			var curCoords = coords[ curSize ][ curPiece.name ];
+
+			if ( curPiece.clipped )
+			{
+				var curPieceBoundsData = getBoundsData( curPiece );
+				curPiece.left = curCoords[ 0 ] - ( curPieceBoundsData.clipped.left || 0 );
+				curPiece.top = curCoords[ 1 ] + ( curPieceBoundsData.clipped.top || 0 );
+			}
+			else 
+			{
+				curPiece.position = curCoords;
+				// curPiece.left = curCoords[ 0 ];
+				// curPiece.top = curCoords[ 1 ];
+			}
+
+			aaTimer.endTask( "moving " + curPiece.name );
+		} );
+
+		aaTimer.endTask( "moving " + curSize );
+	} );
+
 
 	//if there are any unnamed pieces, make them selected and send an error message
 	if ( unnamedPieces.length > 0 )
@@ -82,6 +106,8 @@ function moveArtwork ( data )
 		log.e( "There were " + len + " unnamed pieces on the prepress layer for " + curGarment );
 		result = false;
 	}
+
+	aaTimer.endTask( "moveArtwork for " + garmentLabel );
 
 	return result;
 

@@ -14,80 +14,87 @@
 
 */
 
-function getDest(art,mockSize)
+function getDest ( args )
 {
-	log.h("Beginning execution of getDest function with arguments: ::art = " + art.parent.name + "::mockSize = " + mockSize);
+	var curGarLay = args.curGarLay;
+	var ppLay = findSpecificLayer( curGarLay, "Prepress" );
+	var art = args.curArtItem;
+	var artBounds = getBoundsData( art );
+	var mockSize = args.mockSize;
+	log.h( "Beginning execution of getDest function with arguments: ::art = " + art.parent.name + "::mockSize = " + mockSize );
 
-	var result = [];
-	var mockSizeLay = findSpecificLayer(ppLay,mockSize);
-	if(!mockSizeLay)
+	var overlappingPieceNames = [];
+	var mockSizeLay = findSpecificLayer( ppLay, mockSize );
+	if ( !mockSizeLay )
 	{
 		var parentLayer = ppLay.parent.name;
-		errorList.push("Failed to find a size layer matching the mockup size: " + mockSize);
-		return result;
+		errorList.push( "Failed to find a size layer matching the mockup size: " + mockSize );
+		return overlappingPieceNames;
 	}
 
-
-	var len = mockSizeLay.groupItems.length;
-
-	for(var gd=0;gd<len;gd++)
+	var curSizePieces = afc( mockSizeLay, "groupItems" );
+	curSizePieces.forEach( function ( curPiece )
 	{
-		var thisPiece = mockSizeLay.groupItems[gd];
-		if(intersects(art,thisPiece))
+		if ( curPiece.name.match( /collar|cuff|placket|placard|binding|waist|welt|facing/i ) )
 		{
-			//commented the replace method because it did not work for non-standard mockup sizes
-			//for example "28x20" instead of the standard "XL"
-			// result.push(thisPiece.name.replace(data.mockupSize + " ",""));
-			// result.push(thisPiece.name.substring(data.mockupSize.length + 1, thisPiece.name.length));
-			result.push(thisPiece.name.substring(thisPiece.name.indexOf(" ") + 1, thisPiece.name.length));
+			return;
 		}
-	}
+		var curPieceBounds = getBoundsData( curPiece );
 
-	if(result.length === 0)
-	{
-		log.e("This piece of art is not overlapping any shirt piece.");
-		errorList.push("At least one piece of art on the " + art.parent.name + " layer is not overlapping any garment pieces.");
-		result = false;
-	}
-	else if(result.length > 1)
-	{
-		var rlen = result.length;
-		for(var lr=0;lr< rlen;lr++)
+		//if the centerpoint of the art is within the bounds of the current piece
+		//add the piece name to the overlappingPieceNames array
+		if ( !( artBounds.hc < curPieceBounds.left || artBounds.hc > curPieceBounds.right || artBounds.vc > curPieceBounds.top || artBounds.vc < curPieceBounds.bottom ) )
 		{
-			log.l("result[" + lr + "] = " + result[lr]);
+			overlappingPieceNames.push( curPiece.name.replace( /[^\s]*\s/, "" ) );
+		}
+	} )
+
+	if ( overlappingPieceNames.length === 0 )
+	{
+		log.e( "This piece of art is not overlapping any shirt piece." );
+		errorList.push( "At least one piece of art on the " + art.parent.name + " layer is not overlapping any garment pieces." );
+		overlappingPieceNames = false;
+	}
+	else if ( overlappingPieceNames.length > 1 )
+	{
+		var rlen = overlappingPieceNames.length;
+		for ( var lr = 0; lr < rlen; lr++ )
+		{
+			log.l( "overlappingPieceNames[" + lr + "] = " + overlappingPieceNames[ lr ] );
 		}
 
-		log.l("Checking to see whether these multiple overlaps are acceptable.");
+		log.l( "Checking to see whether these multiple overlaps are acceptable." );
 		//check whether the art SHOULD overlap two different pieces
 		//look for identically named pieces, like Front Left Leg piece of varying inseam sizes
-		// if(samePieceNames(result))
+		// if(samePieceNames(overlappingPieceNames))
 		// {
-		// 	result = [result[0]];
+		// 	overlappingPieceNames = [overlappingPieceNames[0]];
 		// }
 
-		//get unique entries of result array
-		result = getUnique(result);
-		log.l("unique dests = " + result.join(", "));
+		//get unique entries of overlappingPieceNames array
+		overlappingPieceNames = getUnique( overlappingPieceNames );
+		log.l( "unique dests = " + overlappingPieceNames.join( ", " ) );
 
 
 		//look for multiple overlap between two different pieces
 		//for example front left and front right for a full button or full zip
-		if(result.length > 1 && !properMultipleOverlap(result))
+		if ( overlappingPieceNames.length > 1 && !properMultipleOverlap( overlappingPieceNames ) )
 		{
-			var userChoice = destPrompt(result,art);
-			if(!userChoice)
+			var destPromptArgs = { "pieceNames": overlappingPieceNames, "art": art, "curGarLayName": curGarLay.name };
+			var userChoice = destPrompt( destPromptArgs );
+			if ( !userChoice )
 			{
-				errorList.push("You cancelled the dialog for " + art.parent.name + ". This artwork was skipped.");
-				log.l("User cancelled destPrompt dialog for " + art.parent.name);
-				result = null;
+				errorList.push( "You cancelled the dialog for " + art.parent.name + ". This artwork was skipped." );
+				log.l( "User cancelled destPrompt dialog for " + art.parent.name );
+				overlappingPieceNames = null;
 			}
 			else
 			{
-				result = [userChoice];
+				overlappingPieceNames = [ userChoice ];
 			}
 		}
 	}
 
-	return result;
+	return overlappingPieceNames;
 
 }

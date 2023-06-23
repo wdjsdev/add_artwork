@@ -1,46 +1,20 @@
-function revealPrepressLayersAndItems()
+function revealPrepressLayersAndItems ( garmentLayer )
 {
-	var ppLayers = [];
-	var curLay, curItem,curSizeLay;
-	for (var x = 0; x < docRef.layers.length; x++)
+	afc( garmentLayer, "layers" ).forEach( function ( curLay, index )
 	{
-		ppLay = getPPLay(docRef.layers[x]);
-		if (!ppLay || !docRef.layers[x].visible || docRef.layers[x].locked) continue;
-
-		ppLay.locked = false;
-		ppLay.visible = true;
-		for(var p=0;p<ppLay.layers.length;p++)
+		if ( curLay.name.match( /prepress|artwork/i ) )
 		{
-			curSizeLay = ppLay.layers[p];
-			curSizeLay.locked = false;
-			curSizeLay.visible = true;
-			for (var y = 0; y < curSizeLay.pageItems.length; y++)
+			curLay.locked = false;
+			curLay.visible = true;
+			afc( curLay, "layers" ).forEach( function ( curSubLay, index )
 			{
-				curItem = curSizeLay.pageItems[y];
-				curItem.locked = false;
-				curItem.hidden = false;
-			}
+				curSubLay.locked = false;
+				curSubLay.visible = true;
+				afc( curSubLay, "pageItems" ).forEach( function ( curItem, index )
+				{
+					curItem.locked = curItem.hidden = false;
+				} )
+			} )
 		}
-
-	}
-
-	// for (var x = 0, ; x < ppLayers.length; x++)
-	// {
-	// 	curLay = ppLayers[x];
-	// 	curLay.locked = false;
-	// 	curLay.visible = true;
-	// 	for(var p=0;p<curLay.layers.length;p++)
-	// 	{
-	// 		curSizeLay = curLay.layers[p];
-	// 		curSizeLay.locked = false;
-	// 		curSizeLay.visible = true;
-	// 		for (var y = 0; y < curSizeLay.pageItems.length; y++)
-	// 		{
-	// 			curItem = curSizeLay.pageItems[y];
-	// 			curItem.locked = false;
-	// 			curItem.hidden = false;
-	// 		}
-	// 	}
-		
-	// }
+	} );
 }
