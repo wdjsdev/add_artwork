@@ -106,8 +106,8 @@ function addArt ( args )
 	{
 		log.l( "doing sizeLay: " + sizeLay.name );
 		sizeLay.locked = !( sizeLay.visible = true );
-
-		findAllPageItems( sizeLay, new RegExp( destPieceName + "$", "i" ) ).forEach( function ( destPiece )
+		var curSizeItems = findAllPageItems( sizeLay, new RegExp( destPieceName + "$", "i" ) );
+		curSizeItems.forEach( function ( destPiece )
 		{
 			var artGroup = findSpecificPageItem( destPiece, "Art Group" );
 			if ( !artGroup )
