@@ -20,7 +20,7 @@ function getDest ( args )
 	var ppLay = findSpecificLayer( curGarLay, "Prepress" );
 	var art = args.curArtItem;
 	var artBounds = getBoundsData( art );
-	var mockSize = args.mockSize;
+	var mockSize = args.mockupSize;
 	log.h( "Beginning execution of getDest function with arguments: ::art = " + art.parent.name + "::mockSize = " + mockSize );
 
 	var overlappingPieceNames = [];
