@@ -8,7 +8,7 @@
 
 function makeClipMask ( destPiece )
 {
-	var lp = findLargestPath( destPiece );
+	var lp = findBackgroundPath( destPiece );
 	clipMask = lp.duplicate( destPiece, ElementPlacement.PLACEATBEGINNING );
 	if ( clipMask.typename.match( /compoundpath/i ) )
 	{
