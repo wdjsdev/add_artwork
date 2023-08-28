@@ -35,9 +35,10 @@ function getGarments ( layers )
 	{
 		var ppl = findSpecificLayer( curLay, "Prepress" );
 		var il = findSpecificLayer( curLay, "Information" );
-		var al = findSpecificLayer( curLay, "Artwork", "any" );
+		// var al = findSpecificLayer( curLay, "Artwork", "any" );
 		var cil = il ? findSpecificLayer( il, "Prepress Completed" ) : undefined;
-		if ( ppl && al && il && !cil )
+		// if ( ppl && al && il && !cil )
+		if ( ppl && il && !cil )
 		{
 			validGarments.push( curLay );
 		}

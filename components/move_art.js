@@ -26,7 +26,10 @@ function moveArtwork ( data, ppLay )
 	}
 	else if ( !coords )
 	{
-		errorList.push( "Could not find placment data for " + curGarment );
+		if ( !garmentLabel.match( /mbb/i ) )
+		{
+			errorList.push( "Could not find placment data for " + curGarment );
+		}
 		return;
 	}
 	var sizeLayers = afc( ppLay, "layers" );
