@@ -13,6 +13,7 @@
 
 function moveArtwork ( data, ppLay )
 {
+	if ( ppLay.parent.name.match( /mbb/i ) ) { return true; }
 	var garmentLabel = ppLay.parent.name;
 	log.l( "moving artwork for " + garmentLabel );
 	aaTimer.beginTask( "moveArtwork for " + garmentLabel );
