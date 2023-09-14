@@ -150,6 +150,10 @@ function addArt ( args )
 			{
 				if ( alignToFrontLogo )
 				{
+					if ( !curSizeFrontLogo )
+					{
+						curSizeFrontLogo = srcFrontLogo;
+					}
 					var curSizeFrontLogoBounds = getBoundsData( curSizeFrontLogo );
 					artCopy.top = curSizeFrontLogoBounds.bottom - relativePlacement[ 1 ];
 					align( curSizeFrontLogo, [ artCopy ], "hcenter" );
