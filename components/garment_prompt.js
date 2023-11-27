@@ -11,42 +11,43 @@
 		array of garments
 */
 
-function garmentPrompt(garLayers)
+function garmentPrompt ( garLayers )
 {
 	var result = [];
 	var indButtons = [];
 
-	var w = new Window("dialog", "Which garments do you want to process?");
+	var w = new Window( "dialog", "Which garments do you want to process?" );
 
-		//all the things button
-		var all = w.add("group");
-			var img = resourcePath + "Images/all.jpg";
-			var allButton = all.add("iconButton", undefined, img);
-			allButton.onClick = function()
-			{
-				result = garLayers;
-				w.close();
-			}
+	//all the things button
+	var allButton = w.add( "group" );
+	var img = resourcePath + "Images/all.jpg";
+	var allButton = ( File( img ).exists ) ? allButton.add( "iconButton", undefined, img ) : allButton.add( "button", undefined, "All" );
+
+	allButton.onClick = function ()
+	{
+		result = garLayers;
+		w.close();
+	}
 
 
-		//group of buttons to generate an individual prepress
-		var individual = w.add("group");
-		individual.orientation = "column";
+	//group of buttons to generate an individual prepress
+	var individual = w.add( "group" );
+	individual.orientation = "column";
 
-			for(var num = 0;num<garLayers.length;num++)
-			{
-				makeButton(num,garLayers[num])
-			}
+	for ( var num = 0; num < garLayers.length; num++ )
+	{
+		makeButton( num, garLayers[ num ] )
+	}
 
-			function makeButton(num,layer)
-			{
-				indButtons[num] = individual.add("button", undefined, layer.name);
-				indButtons[num].onClick = function()
-				{
-					result.push(layer);
-					w.close();
-				}
-			}
+	function makeButton ( num, layer )
+	{
+		indButtons[ num ] = individual.add( "button", undefined, layer.name );
+		indButtons[ num ].onClick = function ()
+		{
+			result.push( layer );
+			w.close();
+		}
+	}
 	w.show();
 
 
