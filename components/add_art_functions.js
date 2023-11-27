@@ -25,6 +25,34 @@ function addArt ( args )
 	var ppLay = findSpecificLayer( curGarmentLay, "Prepress" );
 	ppLay.locked = !( ppLay.visible = true );
 
+	cleanupHiddenArt( srcArt );
+
+	function cleanupHiddenArt ( artItem )
+	{
+		var hiddenArt = [];
+
+		digForHiddenArt( artItem );
+
+		hiddenArt.forEach( function ( item )
+		{
+			item.remove();
+		} );
+
+		function digForHiddenArt ( curItem )
+		{
+			if ( curItem.hidden )
+			{
+				hiddenArt.push( curItem );
+			}
+			else if ( curItem.typename.match( /group|layer/i ) )
+			{
+				afc( curItem ).forEach( function ( child )
+				{
+					digForHiddenArt( child );
+				} )
+			}
+		}
+	}
 
 	var masterArtLay = findSpecificLayer( curGarmentLay, "Artwork", "any" );
 	var artLayName = srcArt.parent.name;
