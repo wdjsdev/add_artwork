@@ -39,6 +39,12 @@ function moveArtwork ( data, ppLay )
 		var curSize = curSizeLay.name;
 		if ( !coords[ curSize ] )
 		{
+			curSizeLay.name = curSizeLay.name.replace( /^[w\s]*|[\s]*$/i, "" );
+			curSize = curSizeLay.name;
+		}
+
+		if ( !coords[ curSize ] )
+		{
 			errorList.push( "Could not find placement data for " + curSize + "." );
 			return;
 		}
@@ -85,8 +91,6 @@ function moveArtwork ( data, ppLay )
 			else 
 			{
 				curPiece.position = curCoords;
-				// curPiece.left = curCoords[ 0 ];
-				// curPiece.top = curCoords[ 1 ];
 			}
 
 			aaTimer.endTask( "moving " + curPiece.name );
