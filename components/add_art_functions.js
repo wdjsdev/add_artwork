@@ -67,7 +67,7 @@ function addArt ( args )
 
 
 
-	var mockSize = data.mockupSize;
+	var mockSize = data.mockupSize.replace( /^w/i, "" ));
 	var mockSizeLay = findSpecificLayer( ppLay, mockSize );
 	var mockSizeDest = findSpecificPageItem( mockSizeLay, new RegExp( destPieceName + "$", "i" ) );
 

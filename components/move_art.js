@@ -58,7 +58,10 @@ function moveArtwork ( data, ppLay )
 				unnamedPieces.push( curPiece );
 				return;
 			}
-			else if ( !coords[ curSize ][ curPiece.name ] )
+
+			curPiece.name = curPiece.name.replace( /\s+/g, " " ).replace( /\n/g, " " );
+
+			if ( !coords[ curSize ][ curPiece.name ] )
 			{
 				errorList.push( "Could not find placement data for " + curPiece.name + ".\nThis piece has been skipped." );
 				return;

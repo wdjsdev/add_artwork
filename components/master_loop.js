@@ -48,6 +48,25 @@ function masterLoop ( garmentLayers )
 			return;
 		}
 
+		//strip out any womens sizing
+		if ( libEntry.mockupSize.match( /^w[xsml234]/i ) )
+		{
+			libEntry.mockupSize = libEntry.mockupSize.replace( /^w/i, "" );
+			for ( var size in libEntry.placement )
+			{
+				if ( size.match( /^w/i ) )
+				{
+					var newObj = {};
+					for ( var prop in libEntry.placement[ size ] )
+					{
+						newObj[ prop.replace( /^w/i, "" ) ] = libEntry.placement[ size ][ prop ];
+					}
+					libEntry.placement[ size.replace( /^w/i, "" ) ] = newObj;
+					delete libEntry.placement[ size ];
+				}
+			}
+		}
+
 		revealPrepressLayersAndItems( curGarLay );
 
 		//add the artwork to the garment for all sizes
