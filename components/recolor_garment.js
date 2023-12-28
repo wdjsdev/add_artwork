@@ -64,16 +64,55 @@ function recolorGarment ()
 		log.l( "Attempting to recolor: " + name );
 		//look for the graphic style
 		var gs = findSpecificGraphicStyle( docRef, name );
-		var placeholderSwatch = makeNewSpotColor( name );
-		//select all items that match the fill color "name"
 
-		if ( docRef.selection && docRef.selection.length > 0 )
+
+
+
+		if ( gs )
 		{
-			docRef.selection = null;
+			var curSel, item;
+			for ( var cc = 0, len = docRef.selection.length; cc < len; cc++ )
+			{
+				dig( docRef.selection[ cc ] );
+				item = undefined;
+			}
+			var bSelection = selectArt( name.replace( /c/i, "B" ) ); //select the "b" placeholder colors. B1, B2, etc.
+			var cSelection = selectArt( name ); //select the "c" placeholder colors. C1, C2, etc.
+			cSelection = cSelection.concat( bSelection );
+			cSelection.forEach( function ( item )
+			{
+				dig( item );
+			} );
+			log.l( "finished applying the graphic style: " + name + " to all selected pageItems." );
 		}
-		docRef.defaultFillColor = placeholderSwatch.color;
-		docRef.defaultStrokeColor = docRef.swatches[ "[None]" ].color;
-		app.executeMenuCommand( "Find Fill Color menu item" );
+		else
+		{
+			errorList.push( "Please double check this artwork! There was no graphic style for " + name );
+			log.l( "no graphic style existed for: " + name );
+			log.l( "using simple fill color: " + paramBlock.fillColor.name );
+			docRef.defaultFillColor = paramBlock.fillColor;
+		}
+
+
+		function selectArt ( swatchName )
+		{
+			var placeholderSwatch = makeNewSpotColor( swatchName );
+			//select all items that match the fill color "name"
+
+			if ( docRef.selection && docRef.selection.length > 0 )
+			{
+				docRef.selection = null;
+			}
+			docRef.defaultFillColor = placeholderSwatch.color;
+			// docRef.defaultStrokeColor = docRef.swatches[ "[None]" ].color;
+			docRef.defaultStrokeColor = new NoColor();
+			app.executeMenuCommand( "Find Fill Color menu item" );
+			var result = afc( docRef, "selection" );
+			docRef.selection = null;
+			return result;
+		}
+
+
 
 		function dig ( curItem )
 		{
@@ -112,23 +151,7 @@ function recolorGarment ()
 		}
 
 
-		if ( gs )
-		{
-			var curSel, item;
-			for ( var cc = 0, len = docRef.selection.length; cc < len; cc++ )
-			{
-				dig( docRef.selection[ cc ] );
-				item = undefined;
-			}
-			log.l( "finished applying the graphic style: " + name + " to all selected pageItems." );
-		}
-		else
-		{
-			errorList.push( "Please double check this artwork! There was no graphic style for " + name );
-			log.l( "no graphic style existed for: " + name );
-			log.l( "using simple fill color: " + paramBlock.fillColor.name );
-			docRef.defaultFillColor = paramBlock.fillColor;
-		}
+
 
 	}
 }
